@@ -1,0 +1,22 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 240px; /* Ensure the sidebar has a fixed width */
+  flex-shrink: 0; /* Prevent the sidebar from shrinking */
+  height: 100vh; /* Full viewport height */
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: #f8fafc;
+  margin-left: 240px; /* offset for fixed sidebar */
+  max-height: 100vh;
+}

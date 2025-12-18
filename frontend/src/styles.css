@@ -1,0 +1,83 @@
+.inventory-container {
+  width: 420px;
+  margin-top: 40px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-item-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-item-box input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.add-item-box button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-item-box button:hover {
+  background-color: #43a047;
+}
+
+.inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.item-name {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background-color: #1976d2;
+  color: white;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background-color: #1565c0;
+}
+
+.quantity {
+  min-width: 60px;
+  text-align: center;
+}

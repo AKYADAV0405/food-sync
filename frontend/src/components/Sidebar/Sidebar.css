@@ -1,0 +1,52 @@
+.sidebar {
+  width: 240px;
+  background-color: #002b5b; /* Dark blue background */
+  color: white; /* White text */
+  border-right: 1px solid #004080; /* Slightly lighter border */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Full height */
+  box-sizing: border-box; /* Include padding and border in width/height */
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1; /* Ensure nav items take up available space */
+}
+
+.nav-item {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  text-align: left; /* Align text to the left */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space for icons */
+}
+
+.nav-item:hover {
+  background-color: #004080; /* Slightly lighter hover effect */
+}
+
+.nav-item.active {
+  background-color: #0056b3; /* Highlight active item */
+  color: white;
+  max-height: 17px;
+}
+
+.nav-item .icon {
+  font-size: 18px; /* Icon size */
+}

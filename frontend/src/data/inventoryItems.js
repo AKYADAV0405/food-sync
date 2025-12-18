@@ -1,0 +1,23 @@
+export const inventoryItems = [
+  "tomato",
+  "potato",
+  "onion",
+  "carrot",
+  "cabbage",
+  "spinach",
+  "peas",
+  "beans",
+  "cauliflower",
+  "brinjal",
+  "pumpkin",
+  "radish",
+  "turnip",
+  "beetroot",
+  "lettuce",
+  "cucumber",
+  "chili",
+  "garlic",
+  "ginger",
+  "okra",
+  "mushroom"
+];

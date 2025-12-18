@@ -1,0 +1,157 @@
+id,name,canonical,aliases,default_unit
+1,tomato,vegetable,tamatar;tomatoes;tomatos,kg
+2,onion,vegetable,pyaaz;onions,kg
+3,potato,vegetable,aloo;potatoes,kg
+4,moong dal,pulse,green gram;moong,kg
+5,rice,grain,chawal;basmati rice,kg
+6,turmeric,spice,haldi;turmeric powder,g
+7,ginger,vegetable,adrak,kg
+8,garlic,vegetable,lehsun,kg
+9,green chili,vegetable,hari mirch,kg
+10,coriander seeds,spice,dhaniya;sabut dhaniya,g
+11,cumin seeds,spice,jeera,g
+12,mustard seeds,spice,sarson;rai,g
+13,red chili powder,spice,lal mirch powder,g
+14,toor dal,pulse,arhar dal;pigeon pea,kg
+15,urad dal,pulse,black gram,kg
+16,chana dal,pulse,split bengal gram,kg
+17,masoor dal,pulse,red lentil,kg
+18,rajma,pulse,kidney beans,kg
+19,kabuli chana,pulse,chickpeas;white chana,kg
+20,wheat flour,grain,atta,kg
+21,semolina,grain,suji;rava,kg
+22,gram flour,pulse,besan,kg
+23,cauliflower,vegetable,phool gobi;gobhi;ghobhi,kg
+24,cabbage,vegetable,patta gobi,kg
+25,okra,vegetable,bhindi;lady finger,kg
+26,brinjal,vegetable,baingan;eggplant,kg
+27,asafetida,spice,hing,g
+28,cloves,spice,laung,g
+29,cardamom,spice,elaichi,g
+30,cinnamon,spice,dalchini,g
+31,spinach,vegetable,palak,kg
+32,fenugreek leaves,vegetable,methi;hari methi,kg
+33,mustard greens,vegetable,sarson saag,kg
+34,bitter gourd,vegetable,karela,kg
+35,bottle gourd,vegetable,lauki;ghiya,kg
+36,ridge gourd,vegetable,turai;tori,kg
+37,radish,vegetable,mooli,kg
+38,carrot,vegetable,gajar,kg
+39,beetroot,vegetable,chukandar,kg
+40,sweet potato,vegetable,shakarkandi,kg
+41,colocasia,vegetable,arbi;ghuinya,kg
+42,drumstick,vegetable,moringa;sahjan,kg
+43,fenugreek seeds,spice,methi dana,g
+44,fennel seeds,spice,saunf,g
+45,carom seeds,spice,ajwain,g
+46,black pepper,spice,kali mirch,g
+47,black cardamom,spice,badi elaichi,g
+48,poppy seeds,spice,khus khus,g
+49,cashew nuts,dry fruit,kaju,kg
+50,almonds,dry fruit,badam,kg
+51,raisins,dry fruit,kishmish,kg
+52,walnuts,dry fruit,akhrot,kg
+53,pistachios,dry fruit,pista,kg
+54,peanuts,dry fruit,mungfali,kg
+55,jaggery,sweetener,gur,kg
+56,tamarind,condiment,imli,kg
+57,mustard oil,oil,sarson ka tel,l
+58,coconut oil,oil,nariyal tel,l
+59,ghee,dairy,clarified butter,kg
+60,paneer,dairy,cottage cheese,kg
+61,curd,dairy,dahi;yogurt,kg
+62,makhana,dry fruit,fox nuts;lotus seeds,kg
+63,sesame seeds,spice,til,g
+64,curry leaves,herb,kadi patta;meetha neem,g
+65,mint leaves,herb,pudina,g
+66,capsicum,vegetable,shimla mirch;bell pepper,kg
+67,french beans,vegetable,phali;beans,kg
+68,cluster beans,vegetable,gawar phali,kg
+69,cowpeas,vegetable,lobiya phali,kg
+70,raw mango,vegetable,kachcha aam;keri,kg
+71,raw banana,vegetable,kachcha kela,kg
+72,raw papaya,vegetable,kachcha papita,kg
+73,jackfruit,vegetable,kathal,kg
+74,pointed gourd,vegetable,parwal;patal,kg
+75,ivy gourd,vegetable,tindora;kundru,kg
+76,apple gourd,vegetable,tinda,kg
+77,snake gourd,vegetable,chichinda;padwal,kg
+78,ash gourd,vegetable,petha;safed kaddu,kg
+79,pumpkin,vegetable,kaddu;kohala,kg
+80,elephant foot yam,vegetable,jimikand;suran,kg
+81,taro root,vegetable,arbi;kanda,kg
+82,knol khol,vegetable,ganth gobi,kg
+83,mushroom,vegetable,khumb;guchhi,kg
+84,green peas,vegetable,matar,kg
+85,spring onion,vegetable,hara pyaaz,kg
+86,bathua,vegetable,chenopodium;pigweed,kg
+87,amaranth leaves,vegetable,chaulai;lal saag,kg
+88,sorrel leaves,vegetable,gongura;pundi,kg
+89,dil leaves,vegetable,shepu;suva,kg
+90,lotus stem,vegetable,kamal kakdi;bheen,kg
+91,bamboo shoot,vegetable,baans,kg
+92,broad beans,vegetable,sem phali,kg
+93,ridge gourd,vegetable,turai;luffa,kg
+94,sponge gourd,vegetable,nenua;ghuli,kg
+95,sweet corn,vegetable,bhutta;makka,kg
+96,pearl millet,grain,bajra,kg
+97,finger millet,grain,ragi;nachni,kg
+98,sorghum,grain,jowar,kg
+99,foxtail millet,grain,kangni;kakum,kg
+100,buckwheat,grain,kuttu,kg
+101,water chestnut flour,grain,singhara atta,kg
+102,beaten rice,grain,poha;chiwda,kg
+103,puffed rice,grain,murmura;kurmura,kg
+104,sago,grain,sabudana;tapioca pearls,kg
+105,vermicelli,grain,sewiyan;seviyan,kg
+106,star anise,spice,chakri phool,g
+107,mace,spice,javitri,g
+108,nutmeg,spice,jaiphal,g
+109,bay leaf,spice,tej patta,g
+110,black stone flower,spice,dagad phool;patthar phool,g
+111,fennel seeds,spice,saunf,g
+112,nigella seeds,spice,kalonji;onion seeds,g
+113,carom seeds,spice,ajwain,g
+114,coriander powder,spice,dhaniya powder,g
+115,dry mango powder,spice,amchur,g
+116,dry ginger powder,spice,sonth,g
+117,rock salt,spice,sendha namak,kg
+118,black salt,spice,kala namak,g
+119,saffron,spice,kesar,g
+120,tamarind,condiment,imli,kg
+121,kokum,condiment,amsul,g
+122,broken wheat,grain,dalia,kg
+123,barley,grain,jau,kg
+124,poppy seeds,spice,khus khus,g
+125,white pepper,spice,safed mirch,g
+126,chicken,meat,murga;murg,kg
+127,mutton,meat,bakra;goat meat,kg
+128,lamb,meat,bhed ka gosht,kg
+129,eggs,poultry,anda,piece
+130,rohu,seafood,freshwater carp,kg
+131,catla,seafood,indian carp,kg
+132,hilsa,seafood,ilish,kg
+133,pomfret,seafood,paplet,kg
+134,prawns,seafood,jhinga;chingri,kg
+135,surmai,seafood,king fish,kg
+136,bombay duck,seafood,bummalo;bombil,kg
+137,groundnut oil,oil,moongfali tel,l
+138,sunflower oil,oil,soorajmukhi tel,l
+139,rice bran oil,oil,rice oil,l
+140,vanaspati,oil,dalda;vegetable ghee,kg
+141,mango,fruit,aam,kg
+142,guava,fruit,amrood,kg
+143,sapodilla,fruit,chikoo,kg
+144,pomegranate,fruit,anar,kg
+145,custard apple,fruit,sitaphal;sharifa,kg
+146,papaya,fruit,papita,kg
+147,banana,fruit,kela,dozen
+148,lychee,fruit,litchi,kg
+149,black plum,fruit,jamun,kg
+150,jackfruit ripe,fruit,paka kathal,kg
+151,wood apple,fruit,bel;bael,kg
+152,star fruit,fruit,kamrakh,kg
+153,indian gooseberry,fruit,amla,kg
+154,water chestnut,fruit,singhara,kg
+155,muskmelon,fruit,kharbuja,kg
+156,watermelon,fruit,tarbooj,kg
