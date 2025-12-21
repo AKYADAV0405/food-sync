@@ -1,16 +1,4 @@
 /* 🌈 GLOBAL PAGE STYLES */
-/* .recipes-page {
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.55),
-      rgba(0, 0, 0, 0.55)
-    ),
-    url("src/assets/images/re.jpg")
-      center/cover no-repeat;
-  color: #ffffff;
-  font-family: "Poppins", sans-serif;
-} */
 
 .recipes-page {
   min-height: 100vh;
@@ -24,7 +12,7 @@ body[data-theme="light"] .recipes-page {
       rgba(248, 250, 252, 0.65),
       rgba(241, 245, 249, 0.65)
     ),
-    url("src/assets/images/red.jpg");
+    url("src/assets/images/re.jpg");
 
   background-size: cover;
   background-position: center;
