@@ -1,0 +1,19 @@
+/* 🌙 DARK THEME (DEFAULT) */
+body[data-theme="dark"] {
+  --bg-main: #0f0f0f;
+  --bg-secondary: #181818;
+  --card-bg: rgba(255, 255, 255, 0.12);
+  --text-main: #ffffff;
+  --text-muted: #bdbdbd;
+  --accent: #ff9800;
+}
+
+/* 🌞 LIGHT THEME */
+body[data-theme="light"] {
+  --bg-main: #f4f6f8;
+  --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
+  --text-main: #111111;
+  --text-muted: #555555;
+  --accent: #ff5722;
+}
