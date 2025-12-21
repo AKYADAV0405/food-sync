@@ -1,0 +1,55 @@
+
+/* 🌗 THEME TOGGLE BUTTON */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 1000;
+  padding: 0.5rem 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent), #ff7043);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* 🔐 FLOATING LOGIN BUTTON (BOTTOM LEFT) */
+.login-floating-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+
+  padding: 12px 20px;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-floating-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* 🌗 THEME AWARE LOGIN BUTTON */
+body[data-theme="light"] .login-floating-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+body[data-theme="dark"] .login-floating-btn {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+}
