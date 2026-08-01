@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Set PYTHONPATH so python locates main module cleanly
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app:/app/backend
 
 
 # Copy requirements and install

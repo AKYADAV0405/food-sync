@@ -4,28 +4,64 @@ import base64
 import firebase_admin
 from firebase_admin import firestore, credentials
 
-if not firebase_admin._apps:
-    service_key = os.getenv("FIREBASE_SERVICE_ACCOUNT_KEY")
-    cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    
-    if service_key:
-        try:
-            raw_key = service_key.strip()
-            if raw_key.startswith("{"):
-                cert_dict = json.loads(raw_key)
-            else:
-                cert_dict = json.loads(base64.b64decode(raw_key).decode("utf-8"))
-            firebase_admin.initialize_app(credentials.Certificate(cert_dict))
-            print("[FIREBASE] Initialized with FIREBASE_SERVICE_ACCOUNT_KEY environment variable.")
-        except Exception as e:
-            print(f"[FIREBASE] Warning: Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY ({e}). Falling back to ADC.")
-            firebase_admin.initialize_app()
-    elif cred_path and os.path.exists(cred_path):
-        firebase_admin.initialize_app(credentials.Certificate(cred_path))
-        print(f"[FIREBASE] Initialized with credentials path: {cred_path}")
-    else:
-        firebase_admin.initialize_app()
-        print("[FIREBASE] Initialized using default application credentials (ADC).")
+class DummyDocument:
+    def __init__(self, doc_id="dummy"):
+        self.id = doc_id
+        self.exists = False
+    def get(self):
+        return self
+    def to_dict(self):
+        return {}
+    def set(self, *args, **kwargs):
+        pass
+    def update(self, *args, **kwargs):
+        pass
+    def delete(self, *args, **kwargs):
+        pass
+    def collection(self, *args, **kwargs):
+        return DummyCollection()
 
-db = firestore.client()
+class DummyCollection:
+    def document(self, doc_id="dummy"):
+        return DummyDocument(doc_id)
+    def stream(self):
+        return []
+    def get(self):
+        return []
+
+class DummyFirestoreClient:
+    def collection(self, *args, **kwargs):
+        return DummyCollection()
+
+db = None
+
+try:
+    if not firebase_admin._apps:
+        service_key = os.getenv("FIREBASE_SERVICE_ACCOUNT_KEY")
+        cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+        
+        if service_key:
+            try:
+                raw_key = service_key.strip()
+                if raw_key.startswith("{"):
+                    cert_dict = json.loads(raw_key)
+                else:
+                    cert_dict = json.loads(base64.b64decode(raw_key).decode("utf-8"))
+                firebase_admin.initialize_app(credentials.Certificate(cert_dict))
+                print("[FIREBASE] Initialized with FIREBASE_SERVICE_ACCOUNT_KEY environment variable.")
+            except Exception as e:
+                print(f"[FIREBASE] Warning: Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY ({e}). Falling back to ADC.")
+                firebase_admin.initialize_app()
+        elif cred_path and os.path.exists(cred_path):
+            firebase_admin.initialize_app(credentials.Certificate(cred_path))
+            print(f"[FIREBASE] Initialized with credentials path: {cred_path}")
+        else:
+            firebase_admin.initialize_app()
+            print("[FIREBASE] Initialized using default application credentials (ADC).")
+
+    db = firestore.client()
+except Exception as err:
+    print(f"[FIREBASE NOTICE] Could not initialize Firestore client ({err}). Using fallback DB client.")
+    db = DummyFirestoreClient()
+
 
