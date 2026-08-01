@@ -1,0 +1,249 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,600,700");
+
+* {
+  box-sizing: border-box;
+}
+
+/* 🌈 PAGE BACKGROUND */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url("../images/login-bg.jpg") center / cover no-repeat;
+
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🧊 GLASS CONTAINER */
+.login-container {
+  width: 880px;
+  max-width: 95%;
+  height: 540px;
+  border-radius: 22px;
+  position: relative;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* 📦 FORM CONTAINERS */
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  pointer-events: none;
+}
+
+/* 📝 FORM */
+.form-container form {
+  width: 80%;
+  text-align: center;
+}
+
+.form-container h1 {
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+/* ✏ INPUTS */
+.form-container input {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 8px 0;
+
+  border-radius: 12px;
+  border: none;
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+/* 🔘 BUTTON */
+.form-container button {
+  margin-top: 14px;
+  padding: 11px 34px;
+  border-radius: 30px;
+  border: none;
+
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.form-container button:hover {
+  transform: scale(1.04);
+}
+
+/* 🌐 SOCIAL DIVIDER & GOOGLE BTN */
+.social-divider {
+  display: flex;
+  align-items: center;
+  margin: 12px 0 8px 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.social-divider::before,
+.social-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.social-divider span {
+  padding: 0 10px;
+}
+
+.google-btn {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #ffffff !important;
+  color: #3c4043 !important;
+  margin-top: 4px !important;
+  padding: 10px 18px !important;
+  border-radius: 24px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.2s ease !important;
+}
+
+.google-btn:hover {
+  background: #f8f9fa !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* 🔁 SWITCH TEXT */
+.switch-text {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.switch-text span {
+  color: #ffccbc;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 🔐 SIGN IN (DEFAULT VISIBLE) */
+.sign-in {
+  left: 0;
+  transform: translateX(0);
+  opacity: 1;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+/* 🆕 SIGN UP (HIDDEN INITIALLY) */
+.sign-up {
+  left: 0;
+  transform: translateX(-100%);
+  opacity: 0;
+  z-index: 1;
+}
+
+/* 🔄 ACTIVE STATE */
+.login-container.active .sign-in {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.login-container.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+/* 🌈 OVERLAY */
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+
+  transition: transform 0.6s ease-in-out;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.login-container.active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.overlay {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: white;
+
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+.login-container.active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 40px;
+  text-align: center;
+}
+
+.overlay-panel h1 {
+  font-size: 2.2rem;
+}
+
+.overlay-panel p {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}

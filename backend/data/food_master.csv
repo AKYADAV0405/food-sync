@@ -1,0 +1,167 @@
+id,name,canonical,aliases,category,default_unit,store_unit,avg_weight_g,piece_weight_g,shelf_life_days,image_url
+1,tomato,tomato,tamatar;tomatoes;tmto;vande;hybrid tomato;desi tomato,vegetables,kg,kg,80,80,7,https://in.images.search.yahoo.com/search/images;_ylt=AwrKBZ2cEUhpFgIAcUK7HAx.;_ylu=Y29sbwNzZzMEcG9zAzEEdnRpZAMEc2VjA3BpdnM-?p=tomato&fr2=piv-web&type=E210IN1589G91896&fr=mcafee#id=6&iurl=http%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F8%2F89%2FTomato_je.jpg&action=click
+2,onion,onion,pyaaz;onions;kanda;white onion;red onion,vegetables,kg,kg,100,100,14,https://cdn-icons-png.flaticon.com/512/765/765544.png
+3,potato,potato,aloo;potatoes;batata;baby potato,vegetables,kg,kg,150,150,21,https://cdn-icons-png.flaticon.com/512/765/765532.png
+4,moong dal,moong dal,green gram;moong;mung bean;moong dhuli;yellow dal,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+5,rice,rice,chawal;basmati;sona masoori;kolam rice;brown rice;indrayani,grains_cereals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+6,turmeric,turmeric,haldi;turmeric powder;haldi powder,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+7,ginger,ginger,adrak;ginger root,vegetables,kg,kg,30,30,14,https://cdn-icons-png.flaticon.com/512/1694/1694368.png
+8,garlic,garlic,lehsun;lasan,vegetables,kg,kg,40,40,30,https://cdn-icons-png.flaticon.com/512/6003/6003734.png
+9,green chili,green chili,hari mirch;chilli;green chillies,vegetables,kg,kg,3,3,10,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+10,coriander seeds,coriander seeds,dhaniya;sabut dhaniya;whole coriander,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+11,cumin seeds,cumin seeds,jeera;zeera;cumin,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+12,mustard seeds,mustard seeds,sarson;rai;black mustard,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+13,red chili powder,red chili powder,lal mirch;chilly powder;mirchi;kashmiri chilli;degi mirch,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+14,toor dal,toor dal,arhar dal;pigeon pea;tuvar dal;arhar,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+15,urad dal,urad dal,black gram;white lentil;urad dhuli;urad chilka,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+16,chana dal,chana dal,split bengal gram,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+17,masoor dal,masoor dal,red lentil;masur;masoor dhuli;malka,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+18,rajma,rajma,kidney beans;rajma chitra;rajma jammu,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+19,kabuli chana,kabuli chana,chickpeas;white chana;chole,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+20,wheat flour,wheat flour,atta;whole wheat flour;chakki atta;aashirvaad atta,grains_cereals,kg,kg,0,0,90,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+21,semolina,semolina,suji;rava;sooji,grains_cereals,kg,kg,0,0,90,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+22,gram flour,gram flour,besan;chana dal flour,pulses_dals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+23,cauliflower,cauliflower,phool gobhi;gobi;cauli,vegetables,pieces,pieces,600,600,4,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+24,cabbage,cabbage,patta gobhi;band gobhi,vegetables,pieces,pieces,700,700,5,https://cdn-icons-png.flaticon.com/512/765/765529.png
+25,spinach,spinach,palak,vegetables,bunch,bunch,250,250,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+26,fenugreek leaves,fenugreek leaves,methi,vegetables,bunch,bunch,250,250,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+27,coriander leaves,coriander leaves,dhaniya patta;kothimbir;cilantro,vegetables,bunch,bunch,100,100,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+28,mint leaves,mint leaves,pudina,vegetables,bunch,bunch,50,50,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+29,curry leaves,curry leaves,kadi patta;curry leaf,vegetables,bunch,bunch,20,20,10,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+30,milk,milk,doodh;full cream milk;toned milk;cow milk;buffalo milk;amul milk;gold milk,dairy,l,l,1000,1000,2,https://cdn-icons-png.flaticon.com/512/931/931945.png
+31,curd,curd,dahi;yogurt;yoghurt;set curd,dairy,kg,kg,500,500,5,https://cdn-icons-png.flaticon.com/512/931/931945.png
+32,paneer,paneer,cottage cheese;pnr;malai paneer,dairy,kg,kg,200,200,4,https://cdn-icons-png.flaticon.com/512/931/931945.png
+33,butter,butter,makkhan;amul butter;salted butter;white butter,dairy,g,g,500,500,30,https://cdn-icons-png.flaticon.com/512/824/824239.png
+34,ghee,ghee,clarified butter;desi ghee;cow ghee,oils_fats,kg,kg,1000,1000,180,https://cdn-icons-png.flaticon.com/512/824/824239.png
+35,cheese,cheese,processed cheese;slices;cubes;mozarella;cheddar,dairy,g,g,200,200,30,https://cdn-icons-png.flaticon.com/512/2313/2313539.png
+36,bread,bread,sandwich bread;whole wheat bread;brown bread;white bread;milk bread,others,pack,pack,400,400,4,https://cdn-icons-png.flaticon.com/512/189/189156.png
+37,eggs,eggs,anda;egg;white eggs;brown eggs,dairy,pieces,pieces,50,50,14,https://cdn-icons-png.flaticon.com/512/837/837560.png
+38,sugar,sugar,chini;shakar;white sugar;sulphurless sugar,others,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+39,salt,salt,namak;iodized salt;table salt;tata salt,spices_condiments,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3437/3437656.png
+40,tea,tea,chai;tea leaves;chai patti;tea powder;red label;taj mahal,others,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/604/604610.png
+41,coffee,coffee,coffee powder;instant coffee;bru;nescafe,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/924/924514.png
+42,oil,oil,cooking oil;refined oil;mustard oil;sunflower oil;soyabean oil;groundnut oil;olive oil,oils_fats,l,l,1000,1000,180,https://cdn-icons-png.flaticon.com/512/2829/2829841.png
+43,biscuit,biscuit,cookies;parle-g;marie;good day;digestive;cream biscuit;oreo,others,pack,pack,100,100,60,https://cdn-icons-png.flaticon.com/512/566/566679.png
+44,maggie,maggie,noodles;instant noodles;maggi;yippee;top ramen,others,pack,pack,70,70,180,https://cdn-icons-png.flaticon.com/512/3014/3014560.png
+45,poha,poha,flattened rice;chiwda;thick poha;thin poha,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+46,vermicelli,vermicelli,semiya;seviyan;roasted vermicelli,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+47,tamarind,tamarind,imli;tamarind paste,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/1694/1694368.png
+48,jaggery,jaggery,gud;gur;jaggery powder,others,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+49,coconut,coconut,nariyal;fresh coconut,fruits,pieces,pieces,400,400,7,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+50,lemon,lemon,nimbu;lime,vegetables,pieces,pieces,40,40,14,https://cdn-icons-png.flaticon.com/512/415/415733.png
+51,carrot,carrot,gajar;red carrot;orange carrot,vegetables,kg,kg,100,100,10,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+52,cucumber,cucumber,kheera;kakdi;english cucumber,vegetables,kg,kg,200,200,5,https://cdn-icons-png.flaticon.com/512/590/590685.png
+53,capsicum,capsicum,shimla mirch;bell pepper;green capsicum,vegetables,kg,kg,150,150,5,https://cdn-icons-png.flaticon.com/512/2909/2909837.png
+54,brinjal,brinjal,baingan;eggplant;aubergine;bharta baingan,vegetables,kg,kg,250,250,5,https://cdn-icons-png.flaticon.com/512/2829/2829815.png
+55,ladies finger,ladies finger,bhindi;okra,vegetables,kg,kg,15,15,5,https://cdn-icons-png.flaticon.com/512/234/234707.png
+56,bottle gourd,bottle gourd,lauki;ghiya;doodhi,vegetables,pieces,pieces,600,600,6,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+57,bitter gourd,bitter gourd,karela,vegetables,kg,kg,80,80,6,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+58,peas,peas,matar;green peas;frozen peas;safal matar,vegetables,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/1581/1581896.png
+59,apple,apple,seb;royal gala;fuji apple;kinnaur apple,fruits,kg,kg,150,150,10,https://cdn-icons-png.flaticon.com/512/415/415682.png
+60,banana,banana,kela;robusta;elaichi banana,fruits,dozen,dozen,120,120,4,https://cdn-icons-png.flaticon.com/512/2909/2909761.png
+61,mango,mango,aam;alphonso;kesar;dasheri;langra,fruits,kg,kg,250,250,5,https://cdn-icons-png.flaticon.com/512/2909/2909846.png
+62,orange,orange,santra;kinnow,fruits,kg,kg,150,150,7,https://cdn-icons-png.flaticon.com/512/415/415733.png
+63,papaya,papaya,papita,fruits,kg,kg,1000,1000,5,https://cdn-icons-png.flaticon.com/512/2909/2909787.png
+64,pomegranate,pomegranate,anar,fruits,kg,kg,200,200,7,https://cdn-icons-png.flaticon.com/512/1135/1135552.png
+65,grapes,grapes,angoor;black grapes;green grapes;seedless grapes,fruits,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/2909/2909804.png
+66,watermelon,watermelon,tarbooz;kiranz,fruits,kg,kg,2000,2000,7,https://cdn-icons-png.flaticon.com/512/2909/2909861.png
+67,black pepper,black pepper,kali mirch;peppercorns,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+68,cloves,cloves,laung,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+69,cardamom,cardamom,elaichi;green cardamom,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+70,cinnamon,cinnamon,dalchini;cinnamon stick,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+71,bay leaf,bay leaf,tej patta,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+72,asafoetida,asafoetida,hing;hing powder,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+73,garam masala,garam masala,whole spice mix;kitchen king masala,spices_condiments,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/736/736923.png
+74,sambar powder,sambar powder,sambar masala;madrasi sambar powder,spices_condiments,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/736/736923.png
+75,chicken,chicken,murga;chicken breast;chicken legs;curry cut;boneless chicken,others,kg,kg,0,0,2,https://cdn-icons-png.flaticon.com/512/1046/1046774.png
+76,mutton,mutton,goat meat;lamb;curry cut mutton,others,kg,kg,0,0,2,https://cdn-icons-png.flaticon.com/512/1046/1046755.png
+77,fish,fish,machli;seafood;rohu;catla;pomfret;surmai,others,kg,kg,0,0,2,https://cdn-icons-png.flaticon.com/512/3065/3065606.png
+78,groundnut,groundnut,peanut;mungfali;raw peanuts,oils_fats,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+79,cashew,cashew,kaju;cashew nuts,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+80,almond,almond,badam;almonds,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+81,raisin,raisin,kishmish,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+82,dates,dates,khajoor;pind khajoor,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+83,soya chunks,soya chunks,nutrela;meal maker;soya vadi,others,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+84,corn flour,corn flour,corn starch,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+85,baking powder,baking powder,,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+86,baking soda,baking soda,meetha soda;cooking soda,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+87,vinegar,vinegar,sirka;white vinegar;apple cider vinegar,others,ml,ml,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+88,soy sauce,soy sauce,soya sauce;dark soy sauce,others,ml,ml,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+89,ketchup,ketchup,tomato sauce;tomato ketchup;kissan ketchup,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+90,jam,jam,fruit jam;mixed fruit jam;kissan jam,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+91,pickle,pickle,achar;mango pickle;lemon pickle;mixed pickle,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+92,papad,papad,lijjat papad;udad papad,others,pack,pack,200,200,90,https://cdn-icons-png.flaticon.com/512/566/566679.png
+93,honey,honey,shahad;dabur honey,others,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+94,oats,oats,rolled oats;instant oats;quaker oats;masala oats,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+95,corn flakes,corn flakes,kelloggs corn flakes,others,pack,pack,400,400,90,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+96,chocolates,chocolates,cadbury;kitkat;dairy milk;munch;perk;5 star,others,pack,pack,50,50,90,https://cdn-icons-png.flaticon.com/512/566/566679.png
+97,chips,chips,lays;kurkure;potato chips;bingo;pringles;nachos,others,pack,pack,50,50,90,https://cdn-icons-png.flaticon.com/512/566/566679.png
+98,namkeen,namkeen,bhujia;mixture;aloo bhujia;sev;chana chor,others,pack,pack,200,200,90,https://cdn-icons-png.flaticon.com/512/566/566679.png
+109,maida,maida,refined wheat flour;all purpose flour,grains_cereals,kg,kg,0,0,90,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+110,idli batter,idli batter,dosa batter;idli dosa batter,others,kg,kg,0,0,3,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+111,sweet corn,sweet corn,corn kernels;frozen corn;american corn,vegetables,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/1581/1581896.png
+112,mushroom,mushroom,kumbh;button mushroom,vegetables,pack,pack,200,200,3,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+113,broccoli,broccoli,,vegetables,kg,kg,400,400,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+114,lettuce,lettuce,iceberg lettuce,vegetables,bunch,bunch,200,200,4,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+115,zucchini,zucchini,green zucchini;yellow zucchini,vegetables,kg,kg,200,200,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+116,baby corn,baby corn,,vegetables,pack,pack,200,200,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+117,kidney beans white,kidney beans white,lobia;black eyed peas;chawli,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+118,green gram whole,green gram whole,sabut moong,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+119,horse gram,horse gram,kulthi,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+120,ragi,ragi,finger millet;nachni;ragi flour,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+121,bajra,bajra,pearl millet;bajra flour,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+122,jowar,jowar,sorghum;jowar flour,grains_cereals,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3014/3014529.png
+123,amla,amla,gooseberry;indian gooseberry,fruits,kg,kg,30,30,7,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+124,chikoo,chikoo,sapota,fruits,kg,kg,80,80,4,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+125,guava,guava,amrood,fruits,kg,kg,150,150,5,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+126,custard apple,custard apple,sitaphal,fruits,kg,kg,200,200,3,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+127,litchi,litchi,lychee,fruits,kg,kg,0,0,3,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+128,pear,pear,nashpati,fruits,kg,kg,150,150,7,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+129,plum,plum,aloo bukhara,fruits,kg,kg,50,50,5,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+130,peach,peach,aadoo,fruits,kg,kg,100,100,5,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+131,pineapple,pineapple,ananas,fruits,pieces,pieces,800,800,5,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+132,kiwi,kiwi,,fruits,pieces,pieces,80,80,7,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+133,dragon fruit,dragon fruit,,fruits,pieces,pieces,300,300,5,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+134,avocado,avocado,butter fruit,fruits,pieces,pieces,200,200,4,https://cdn-icons-png.flaticon.com/512/2909/2909808.png
+135,beetroot,beetroot,chukandar,vegetables,kg,kg,150,150,10,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+136,radish,radish,mooli,vegetables,kg,kg,150,150,7,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+137,sweet potato,sweet potato,shakarkandi,vegetables,kg,kg,200,200,14,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+138,drumstick,drumstick,sahjan;moringa,vegetables,pieces,pieces,50,50,5,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+139,pumpkin,pumpkin,kaddu,vegetables,kg,kg,0,0,14,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+140,raw banana,raw banana,kacha kela;plantain,vegetables,kg,kg,100,100,5,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+141,yam,yam,jimikand;suran,vegetables,kg,kg,500,500,21,https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+142,black pepper powder,black pepper powder,kali mirch powder,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/5029/5029236.png
+143,chaat masala,chaat masala,,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+144,chole masala,chole masala,,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+145,pav bhaji masala,pav bhaji masala,,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+146,chicken masala,chicken masala,,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+147,biryani masala,biryani masala,,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/736/736923.png
+148,kasuri methi,kasuri methi,dried fenugreek leaves,spices_condiments,g,g,0,0,365,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+149,black chickpeas,black chickpeas,kala chana,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+150,soyabean,soyabean,soy bean,pulses_dals,kg,kg,0,0,365,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+151,roasted chana,roasted chana,bhuna chana,others,kg,kg,0,0,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+152,fox nuts,fox nuts,makhana;lotus seeds,others,pack,pack,100,100,180,https://cdn-icons-png.flaticon.com/512/3514/3514332.png
+153,pasta,pasta,macaroni;penne;fusilli;spaghetti,others,pack,pack,500,500,365,https://cdn-icons-png.flaticon.com/512/3014/3014560.png
+154,mayonnaise,mayonnaise,mayo;veg mayo,others,g,g,0,0,90,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+155,peanut butter,peanut butter,,others,g,g,0,0,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+156,green tea,green tea,green tea bags,others,pack,pack,100,100,365,https://cdn-icons-png.flaticon.com/512/604/604610.png
+157,health drink,health drink,horlicks;bournvita;complan;boost,others,pack,pack,500,500,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+158,soft drink,soft drink,coke;pepsi;sprite;thums up;fanta;limca,others,l,l,0,0,90,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+159,fruit juice,fruit juice,real juice;tropicana;mango juice;apple juice,others,l,l,0,0,180,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+160,energy drink,energy drink,red bull;sting;monster,others,can,can,0,0,365,https://cdn-icons-png.flaticon.com/512/2405/2405466.png
+161,mineral water,mineral water,bisleri;aquafina;water bottle,others,l,l,0,0,365,https://cdn-icons-png.flaticon.com/512/2829/2829841.png
+166,ridge gourd,ridge gourd,torai;turai;turiya,vegetables,kg,kg,150,150,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+167,ivy gourd,ivy gourd,tindora;kundru;tendli,vegetables,kg,kg,10,10,6,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+168,pointed gourd,pointed gourd,parwal;parval,vegetables,kg,kg,30,30,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+169,snake gourd,snake gourd,chichinda;padwal,vegetables,kg,kg,300,300,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+170,ash gourd,ash gourd,petha;winter melon,vegetables,kg,kg,0,0,30,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+171,cluster beans,cluster beans,gavar;guar phali,vegetables,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+172,french beans,french beans,beans;fansi;green beans,vegetables,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+173,colocasia,colocasia,arbi;taro root;arvi,vegetables,kg,kg,50,50,10,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+174,turnip,turnip,shalgam,vegetables,kg,kg,150,150,10,https://cdn-icons-png.flaticon.com/512/1147/1147609.png
+175,amaranth leaves,amaranth leaves,chaulai;lal saag;rajgira leaves,vegetables,bunch,bunch,200,200,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+176,mustard leaves,mustard leaves,sarson ka saag;sarson leaves,vegetables,bunch,bunch,250,250,3,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+177,raw mango,raw mango,kacha aam;kairi;raw mango,vegetables,kg,kg,150,150,10,https://cdn-icons-png.flaticon.com/512/2909/2909846.png
+178,raw papaya,raw papaya,kacha papita,vegetables,kg,kg,800,800,7,https://cdn-icons-png.flaticon.com/512/2909/2909787.png
+179,spring onion,spring onion,hara pyaaz;scallions,vegetables,bunch,bunch,100,100,4,https://cdn-icons-png.flaticon.com/512/1135/1135560.png
+180,jackfruit,jackfruit,kathal;raw jackfruit,vegetables,kg,kg,0,0,5,https://cdn-icons-png.flaticon.com/512/2909/2909846.png

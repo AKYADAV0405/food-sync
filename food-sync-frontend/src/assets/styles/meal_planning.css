@@ -1,0 +1,497 @@
+/* Meal Planning Page Styles */
+
+.meal-planning-page {
+  padding: 2rem;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.meal-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  backdrop-filter: blur(12px);
+}
+
+.meal-header h1 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin: 0;
+  font-weight: 700;
+}
+
+.meal-header p {
+  color: #718096;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Time of Day Badge */
+.time-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #ebf8ff;
+  color: #3182ce;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  border: 1px solid #bee3f8;
+}
+
+/* Inventory Section (Expiring Items) */
+.expiring-section {
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255,255,255,0.5);
+  backdrop-filter: blur(10px);
+}
+
+.expiring-section h2 {
+  font-size: 1.25rem;
+  color: #e53e3e; /* Red for urgency */
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.expiring-scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+}
+
+.expiring-card {
+  min-width: 160px;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.expiring-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.15);
+}
+
+.expiring-card.selected {
+  background: #e53e3e;
+  border-color: #c53030;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.expiring-card.selected h3, 
+.expiring-card.selected p {
+  color: white;
+}
+
+.expiring-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #c53030;
+  text-transform: capitalize;
+}
+
+.expiring-card p {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+/* Suggestions Grid */
+.suggestions-section {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
+}
+
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.recipe-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-image {
+  height: 200px;
+  background-color: #cbd5e0;
+  position: relative;
+  overflow: hidden;
+}
+
+.recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.recipe-card:hover .recipe-image img {
+  transform: scale(1.05);
+}
+
+.recipe-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tag.meal { background: #e6fffa; color: #2c7a7b; }
+.tag.cuisine { background: #fffaf0; color: #9c4221; }
+
+.recipe-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #2d3748;
+  line-height: 1.4;
+}
+
+.recipe-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #718096;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.cook-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(221, 107, 32, 0.2);
+}
+
+.cook-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(221, 107, 32, 0.3);
+}
+
+.cook-btn:active {
+  transform: translateY(0);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #718096;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #2d3748;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-section {
+  margin-bottom: 2rem;
+}
+
+.modal-section h3 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-left: 4px solid #ed8936;
+  padding-left: 0.75rem;
+}
+
+.ingredient-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.ingredient-item {
+  background: #f7fafc;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border: 1px solid #edf2f7;
+}
+
+.instruction-step {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.step-number {
+  background: #ebf8ff;
+  color: #3182ce;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.step-text {
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .meal-planning-page {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    max-height: 95vh;
+  }
+}
+/* Scrollable area for ingredient list */
+.ingredient-list-scroll {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #f7fafc;
+}
+
+/* Individual Ingredient Row */
+.ingredient-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.ingredient-row:last-child {
+  border-bottom: none;
+}
+
+/* Ingredient Name Text */
+.ing-name {
+  flex: 2;
+  font-weight: 500;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+/* Quantity Input Field */
+.ing-qty {
+  width: 70px;
+  padding: 6px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Unit Dropdown */
+.ing-unit {
+  width: 90px;
+  padding: 6px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 0.9rem;
+}
+
+/* Remove 'X' Button */
+.remove-ing-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0 5px;
+}
+
+.remove-ing-btn:hover {
+  color: #e53e3e; /* Red color on hover */
+}
+
+/* Modal Action Buttons Container */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #edf2f7;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  padding: 8px 16px;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #cbd5e0;
+}
+
+/* Confirm / Deduct Button */
+.confirm-btn {
+  padding: 8px 16px;
+  background-color: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: #38a169;
+}
+
+.confirm-btn:disabled {
+  background-color: #9ae6b4;
+  cursor: not-allowed;
+}
+/* Expiry Badges */
+.expiry-badge {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 5px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.urgent-red {
+  background-color: #ffe3e3;
+  color: #c53030;
+  border: 1px solid #c53030;
+}
+
+.urgent-orange {
+  background-color: #feebc8;
+  color: #c05621;
+  border: 1px solid #c05621;
+}
+
+.urgent-green {
+  background-color: #c6f6d5;
+  color: #2f855a;
+  border: 1px solid #2f855a;
+}

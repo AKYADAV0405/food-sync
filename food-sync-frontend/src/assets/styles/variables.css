@@ -1,0 +1,25 @@
+/* 🌙 PREMIUM DARK THEME */
+:root,
+body,
+body[data-theme="dark"] {
+  --bg-main: #0f172a;
+  --bg-secondary: #1e293b;
+  --card-bg: rgba(30, 41, 59, 0.95);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #ea580c;
+  --hover-bg: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ☀️ LIGHT THEME OVERRIDES */
+body[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent: #ea580c;
+  --hover-bg: rgba(0, 0, 0, 0.04);
+  --border-color: rgba(0, 0, 0, 0.08);
+}

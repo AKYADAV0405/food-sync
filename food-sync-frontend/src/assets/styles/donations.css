@@ -1,0 +1,184 @@
+/* src/assets/styles/donations.css */
+
+.donations-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  /* Ensure image path is correct */
+  background-image: url('../../assets/images/donation.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* --- Header --- */
+.header-container {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.glass-header {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 20px 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: #000;
+  max-width: 800px;
+  width: 90%;
+}
+
+.glass-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #2d3748;
+}
+
+/* --- BIG FORM CONTAINER --- */
+.donation-form-container {
+  background: rgba(255, 255, 255, 0.75); /* Slightly clearer background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  
+  /* 👇 WIDER & CENTERED */
+  max-width: 800px; 
+  width: 90%;
+  margin: 0 auto 50px auto; 
+  padding: 30px 40px;
+  text-align: center;
+}
+
+.donation-form-container h2 {
+  margin-bottom: 25px;
+  color: #2d3748;
+}
+
+/* New: Organizes inputs into rows */
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.donation-input {
+  flex: 1; /* Makes inputs share the width equally */
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e0;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.donate-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ed8936;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(237, 137, 54, 0.3);
+}
+
+.donate-btn:hover {
+  background-color: #dd6b20;
+  transform: translateY(-2px);
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+/* --- Cards Grid --- */
+.donations-list {
+  max-width: 1000px; /* Wider grid to match the form better */
+  margin: 0 auto;
+}
+
+.donations-grid {
+  display: grid;
+  /* Automatically fits cards, minimum 280px wide */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.donation-card {
+  background: rgba(242, 239, 231, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  color: #2d3748;
+  transition: transform 0.2s;
+}
+
+.donation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.donation-card h3 {
+  margin-top: 0;
+  color: #2d3748;
+}
+
+.status-row {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+/* Icons & Colors */
+.safe { color: #28a745; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+.unsafe { color: #dc3545; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+.pickup { color: #3182ce; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-left: auto; }
+
+.distribution {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  font-size: 0.9rem;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .donation-form-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* Stack inputs vertically on phones */
+  .form-row {
+    flex-direction: column; 
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .donation-input {
+    width: 100%;
+  }
+
+  .donations-grid {
+    grid-template-columns: 1fr; /* Single column layout for cards */
+  }
+}
