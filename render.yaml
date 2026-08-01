@@ -2,11 +2,12 @@ services:
   - type: web
     name: food-sync-backend
     env: docker
-    dockerfilePath: backend/Dockerfile
-    dockerContext: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
     envVars:
       - key: GEMINI_API_KEY
         sync: false
       - key: FIREBASE_SERVICE_ACCOUNT_KEY
         sync: false
+
 
