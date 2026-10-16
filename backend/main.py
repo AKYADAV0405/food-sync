@@ -36,7 +36,9 @@ from services.recipe_engine import (
     get_all_recipes,
     generate_multi_day_plan,
     generate_market_depletion_meal_plan,
-    get_all_cuisines
+    get_all_cuisines,
+    parse_ingredient_qty,
+    COMMON_STAPLES
 )
 from services.chef_assistant import chat_with_chef
 from services.jarvis_engine import (
@@ -66,7 +68,13 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -77,6 +85,8 @@ load_food_index()
 
 import os
 from dotenv import load_dotenv
+from firebase_admin import auth as fb_auth
+
 load_dotenv()
 _key = os.getenv("GEMINI_API_KEY")
 if _key:
@@ -89,11 +99,32 @@ def root():
     return {"status": "Food Sync backend running"}
 
 
-# --- 🔒 SECURITY: AUTH DEPENDENCY ---
-async def get_user_id(x_user_id: str = Header(None)):
-    if not x_user_id:
-        return "demo_user"
-    return x_user_id
+# --- 🔒 SECURITY: AUTH DEPENDENCY WITH FIREBASE JWT VERIFICATION ---
+async def get_user_id(authorization: str = Header(None), x_user_id: str = Header(None)) -> str:
+    """
+    Production Firebase JWT Authentication Guard:
+    1. Inspects 'Authorization: Bearer <ID_TOKEN>'.
+    2. Verifies ID token signature and freshness via firebase_admin.auth.verify_id_token().
+    3. Seamlessly falls back to 'X-User-Id' header for development/demo ease,
+       defaulting to 'demo_user' when unauthenticated.
+    """
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split("Bearer ", 1)[1].strip()
+        if token and token != "undefined" and token != "null":
+            try:
+                decoded_token = fb_auth.verify_id_token(token)
+                uid = decoded_token.get("uid")
+                if uid:
+                    return uid
+            except Exception as e:
+                # If invalid/expired token provided in Authorization header, raise 401
+                print(f"[AUTH WARNING] Firebase token verification failed: {e}")
+                raise HTTPException(status_code=401, detail=f"Invalid or expired authentication token: {str(e)}")
+
+    if x_user_id and x_user_id.strip():
+        return x_user_id.strip()
+
+    return "demo_user"
 
 
 # -------- DATA MODELS -------- #
@@ -196,142 +227,6 @@ class ScaleFeedbackRequest(BaseModel):
     feedback: List[ScaleFeedbackItem]
 
 
-# -------- INVENTORY APIs (SECURED) -------- #
-
-@app.get("/inventory")
-def inventory(user_id: str = Depends(get_user_id)):
-    return get_inventory(user_id)
-
-@app.post("/inventory/scale-factors")
-def get_scale_factors(data: ScaleFactorRequest, user_id: str = Depends(get_user_id)):
-    factors = {}
-    for ing in data.ingredients:
-        factors[ing] = get_adaptive_scaling_factor(user_id, ing, data.servings)
-    return factors
-
-
-@app.post("/inventory/add")
-def add_inventory(data: InventoryItem, user_id: str = Depends(get_user_id)):
-    metadata = get_item_metadata(data.item)
-    final_item = data.item
-    final_qty = float(data.quantity)
-    final_unit = data.unit
-    final_cat = data.category
-
-    if metadata:
-        final_item = metadata["canonical"] 
-        if not final_cat: final_cat = metadata["category"]
-        try:
-            final_qty = convert_to_store_unit(final_qty, final_unit, metadata)
-            final_unit = metadata["store_unit"] 
-        except: pass
-
-    return add_inventory_item(user_id, final_item, final_qty, final_unit, final_cat)
-
-@app.post("/inventory/remove")
-def remove_inventory(data: InventoryItem, user_id: str = Depends(get_user_id)):
-    metadata = get_item_metadata(data.item)
-    final_item = data.item
-    final_qty = float(data.quantity)
-    final_unit = data.unit
-    if metadata:
-        final_item = metadata["canonical"]
-        try: final_qty = convert_to_store_unit(final_qty, final_unit, metadata)
-        except: pass
-    return remove_inventory_item(user_id, final_item, final_qty)
-
-
-# -------- COOKING API (SECURED) -------- #
-
-@app.post("/inventory/cook")
-def cook_meal(data: CookRequest, user_id: str = Depends(get_user_id)):
-    deducted_log = []
-    errors = []
-    servings = data.servings
-    for ingredient in data.ingredients:
-        metadata = get_item_metadata(ingredient.item)
-        final_item = ingredient.item
-        
-        # Apply scaling factor
-        if servings != 2.0:
-            factor = get_adaptive_scaling_factor(user_id, ingredient.item, servings)
-            final_qty = float(ingredient.quantity) * factor
-        else:
-            final_qty = float(ingredient.quantity)
-            
-        final_unit = ingredient.unit
-
-        if metadata:
-            final_item = metadata["canonical"]
-            try: final_qty = convert_to_store_unit(final_qty, final_unit, metadata)
-            except Exception as e: errors.append(str(e))
-
-        try:
-            remove_inventory_item(user_id, final_item, final_qty)
-            deducted_log.append({"item": final_item, "qty": final_qty})
-        except Exception as e: errors.append(str(e))
-
-    # Log cooked recipe to history in Firestore for AI personalization
-    try:
-        db.collection("users").document(user_id).collection("history").add({
-            "recipe_name": data.recipe_name,
-            "cooked_at": datetime.utcnow(),
-            "liked": True
-        })
-    except Exception as e:
-        print(f"Error logging cooking history: {e}")
-
-    return {"status": "success", "deducted": deducted_log}
-
-
-# -------- SMART FEATURES (SECURED) -------- #
-
-@app.get("/inventory/expiring")
-def get_expiring_inventory(user_id: str = Depends(get_user_id)):
-    """
-    Returns inventory items sorted by 'Urgency' for the specific user.
-    """
-    items = get_inventory(user_id)
-    scored_items = []
-    for item in items:
-        metadata = get_item_metadata(item["item"])
-        shelf_life = float(metadata.get("shelf_life_days", 180)) if metadata else 180
-        category = metadata.get("category", "others").lower() if metadata else "others"
-        
-        # Priority Logic: Spinach (Veg) > Dal (Pulse)
-        if category in ["vegetables", "fruits", "dairy", "meat"]:
-            priority_score = shelf_life 
-        elif category in ["pulses", "grains", "spices", "oils_fats"]:
-            priority_score = shelf_life + 1000
-        else:
-            priority_score = shelf_life + 500
-        
-        item["priority_score"] = priority_score
-        item["estimated_days"] = shelf_life
-        scored_items.append(item)
-
-    return sorted(scored_items, key=lambda x: x["priority_score"])[:10]
-
-@app.get("/suggest/meal")
-def get_meal_suggestions(item: str, user_id: str = Depends(get_user_id)):
-    current_inv = get_inventory(user_id)
-    inventory_names = [x["item"] for x in current_inv]
-    strict_suggestions = suggest_recipes_strict_match(item, inventory_names)
-    return {"suggestions": strict_suggestions}
-
-@app.get("/suggest/plan")
-def get_meal_plan(days: int = 3, user_id: str = Depends(get_user_id)):
-    inventory = get_inventory(user_id)
-    inv_names = [x["item"] for x in inventory]
-    
-    expiring = []
-    for x in inventory:
-        meta = get_item_metadata(x["item"])
-        if meta and meta.get("category") in ["vegetables", "dairy", "meat"]:
-            expiring.append(x["item"])
-            
-    plan = generate_multi_day_plan(days, inv_names, expiring)
-    return {"plan": plan}
 
 
 # -------- PUBLIC / GENERAL ENDPOINTS -------- #
@@ -345,70 +240,7 @@ def read_recipes(q: str = None, cuisine: str = None, limit: int = 100):
 def read_cuisines():
     return get_all_cuisines()
 
-@app.get("/suggest")
-def get_suggestions(q: str):
-    # Autocomplete is shared
-    return suggest_items("global", q)
 
-@app.post("/suggest/expiring")
-def get_expiring_suggestions(data: ExpiringRequest):
-    return {"suggestions": suggest_recipes_by_ingredients(data.items)}
-
-
-# -------- BILL UPLOAD & DEBUG -------- #
-
-@app.post("/bill/debug")
-async def debug_bill(file: UploadFile = File(...)):
-    """
-    Returns OCR words for debugging. No user data saved here.
-    """
-    data = await file.read()
-    try:
-        image = preprocess_image(data)
-    except Exception:
-        image = Image.open(io.BytesIO(data))
-    
-    words = ocr_words(image)
-    detected_items = fuzzy_match_ocr_words(words)
-    
-    return {
-        "words": words[:100],
-        "detected_items": detected_items
-    }
-
-@app.post("/bill/upload")
-async def upload_bill(file: UploadFile = File(...), user_id: str = Depends(get_user_id)):
-    data = await file.read()
-    items = parse_bill_bytes(data)
-    added = []
-    for it in items:
-        if not it["resolved"]: continue
-        metadata = get_item_metadata(it["canonical"])
-        qty = float(it["quantity"])
-        unit = it["unit"]
-        if metadata:
-            try:
-                qty = convert_to_store_unit(qty, unit, metadata)
-                unit = metadata["store_unit"]
-            except: pass
-        
-        # Save to specific user
-        add_inventory_item(user_id, it["canonical"], qty, unit, it.get("category"))
-        added.append(it)
-    return {"detected": items, "added": added}
-
-# -------- CAMERA IMAGE SCAN (SECURED) -------- #
-
-@app.post("/inventory/scan-image")
-def scan_inventory_image(data: ScanImageRequest, user_id: str = Depends(get_user_id)):
-    """
-    Scans a base64 encoded image of food items using Gemini Vision API and returns detected items.
-    """
-    try:
-        detected_items = scan_food_image(data.image)
-        return {"detected_items": detected_items}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 # -------- AI ASSISTANT CHAT API (SECURED) -------- #
 
@@ -655,16 +487,57 @@ def remove_item_from_inventory(data: RemoveInventoryItemRequest, user_id: str = 
     )
 
 
-USER_SCAN_RATE_LIMIT = {}  # { user_id: [datetime, ...] }
+# Sliding Window Rate Limiter (Redis with in-memory fallback)
+REDIS_URL = os.getenv("REDIS_URL")
+_redis_client = None
+if REDIS_URL:
+    try:
+        import redis
+        _redis_client = redis.from_url(REDIS_URL, decode_responses=True)
+        print("[CACHE] Connected to Redis for persistent distributed rate-limiting.")
+    except Exception as e:
+        print(f"[CACHE] Redis connection unavailable ({e}); falling back to in-memory sliding window.")
+
+_IN_MEMORY_SCAN_LIMIT = {}  # { user_id: [datetime, ...] }
 
 def check_scan_rate_limit(user_id: str, max_requests: int = 10, window_seconds: int = 60):
     """
     Cost Budget & Rate Limiting Guard:
-    Throttles camera vision scans & bill uploads to max 10 requests/minute per user
-    to prevent token abuse and protect API billing limits.
+    Throttles camera vision scans & bill uploads to max 10 requests/minute per user.
+    Uses Redis sliding window (ZADD / ZREMRANGEBYSCORE) if REDIS_URL is configured,
+    with an automatic, graceful in-memory sliding window fallback.
     """
+    import time
+    now_ts = time.time()
+    
+    if _redis_client:
+        try:
+            key = f"rate_limit:scan:{user_id}"
+            pipe = _redis_client.pipeline()
+            # Remove timestamps outside current sliding window
+            pipe.zremrangebyscore(key, 0, now_ts - window_seconds)
+            # Count remaining timestamps in window
+            pipe.zcard(key)
+            # Add current request timestamp
+            pipe.zadd(key, {str(now_ts): now_ts})
+            # Set key expiration
+            pipe.expire(key, window_seconds + 5)
+            _, current_count, _, _ = pipe.execute()
+            
+            if current_count >= max_requests:
+                raise HTTPException(
+                    status_code=429,
+                    detail="Rate limit exceeded: Maximum 10 scan uploads per minute allowed. Please wait 60s."
+                )
+            return
+        except HTTPException:
+            raise
+        except Exception as err:
+            print(f"[CACHE WARNING] Redis rate limit error ({err}), utilizing in-memory fallback.")
+
+    # Graceful in-memory sliding window fallback
     now = datetime.utcnow()
-    timestamps = USER_SCAN_RATE_LIMIT.get(user_id, [])
+    timestamps = _IN_MEMORY_SCAN_LIMIT.get(user_id, [])
     valid_timestamps = [ts for ts in timestamps if (now - ts).total_seconds() < window_seconds]
     if len(valid_timestamps) >= max_requests:
         raise HTTPException(
@@ -672,7 +545,8 @@ def check_scan_rate_limit(user_id: str, max_requests: int = 10, window_seconds: 
             detail="Rate limit exceeded: Maximum 10 scan uploads per minute allowed. Please wait 60s."
         )
     valid_timestamps.append(now)
-    USER_SCAN_RATE_LIMIT[user_id] = valid_timestamps
+    _IN_MEMORY_SCAN_LIMIT[user_id] = valid_timestamps
+
 
 
 class ScanImageRequest(BaseModel):
@@ -801,6 +675,72 @@ def get_meal_plan(days: int = 7, market_day: int | None = None, plan_goal: str =
     result["market_prediction"] = market_prediction
     result["plan_goal"] = plan_goal
     return result
+
+
+class SyncMealPlanGapsRequest(BaseModel):
+    meal_plan: List[dict]
+
+@app.post("/meal-planning/sync-gaps")
+def sync_meal_plan_gaps(data: SyncMealPlanGapsRequest, user_id: str = Depends(get_user_id)):
+    """
+    Scans entire generated weekly meal plan, identifies missing ingredient gaps
+    not present in the user's active inventory (excluding common kitchen staples),
+    and automatically populates them into the user's shopping list.
+    """
+    user_inventory = get_inventory(user_id)
+    inv_names = {i["item"].lower().strip() for i in user_inventory}
+    
+    missing_items = {}
+    
+    for day in data.meal_plan:
+        for slot in ["breakfast", "lunch", "dinner"]:
+            meal = day.get(slot)
+            if not meal:
+                continue
+            
+            raw_ingredients = meal.get("ingredients_raw") or meal.get("ingredients") or []
+            if isinstance(raw_ingredients, str):
+                import json
+                try:
+                    raw_ingredients = json.loads(raw_ingredients)
+                except Exception:
+                    raw_ingredients = [raw_ingredients]
+            
+            for ing in raw_ingredients:
+                if not ing or not isinstance(ing, str):
+                    continue
+                name, qty, unit = parse_ingredient_qty(ing)
+                clean_name = name.lower().strip()
+                
+                # Check against staples and user inventory
+                if clean_name in COMMON_STAPLES or any(st in clean_name for st in COMMON_STAPLES):
+                    continue
+                if clean_name in inv_names or any(inv in clean_name for inv in inv_names):
+                    continue
+                
+                meta = get_item_metadata(clean_name)
+                canonical_name = meta["canonical"] if meta else name.title().strip()
+                
+                if canonical_name in missing_items:
+                    missing_items[canonical_name]["quantity"] += qty
+                else:
+                    missing_items[canonical_name] = {
+                        "item": canonical_name,
+                        "quantity": qty,
+                        "unit": unit
+                    }
+
+    added = []
+    for item_data in missing_items.values():
+        res = add_shopping_item(user_id, item_data["item"], round(item_data["quantity"], 1), item_data["unit"])
+        added.append({"item": item_data["item"], "quantity": round(item_data["quantity"], 1), "unit": item_data["unit"], "res": res})
+        
+    return {
+        "status": "success",
+        "total_gaps": len(added),
+        "added": added
+    }
+
 
 @app.get("/suggest/meal")
 def get_meal_suggestion_by_item(item: str, plan_goal: str = "zero_waste", meal_slot: str | None = None, servings: float = 2.0, user_id: str = Depends(get_user_id)):

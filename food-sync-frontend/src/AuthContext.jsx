@@ -6,6 +6,8 @@ import {
   onAuthStateChanged,
   updateProfile,
   sendEmailVerification,
+  sendPasswordResetEmail,
+  signInAnonymously,
   GoogleAuthProvider,
   signInWithPopup
 } from "firebase/auth";
@@ -48,6 +50,27 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
+  // Password reset function
+  function resetPassword(email) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
+  // 1-Click Demo Login function
+  async function loginDemo() {
+    try {
+      return await signInAnonymously(auth);
+    } catch (err) {
+      console.warn("signInAnonymously fallback to mock demo user:", err);
+      setCurrentUser({
+        uid: "demo_user",
+        displayName: "Demo Foodie 🚀",
+        email: "demo@foodsync.app",
+        isAnonymous: true
+      });
+      return { user: { uid: "demo_user" } };
+    }
+  }
+
   // Manual send verification function
   function sendVerificationEmail() {
     if (!currentUser) return Promise.reject("No user logged in");
@@ -76,7 +99,9 @@ export function AuthProvider({ children }) {
     signup,
     login,
     loginWithGoogle,
+    loginDemo,
     logout,
+    resetPassword,
     sendVerificationEmail,
     getAuthHeaders,
   };

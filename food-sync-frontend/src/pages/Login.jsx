@@ -14,7 +14,10 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { login, signup, loginWithGoogle } = useAuth();
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetMessage, setResetMessage] = useState("");
+
+  const { login, signup, loginWithGoogle, loginDemo, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   // --- HANDLERS ---
@@ -29,6 +32,37 @@ export default function Login() {
         setError("Failed to log in: " + err.message);
     }
     setLoading(false);
+  };
+
+  const handleDemoLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      await loginDemo();
+      navigate("/recipes");
+    } catch (err) {
+      setError("Demo login failed: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!resetEmail) {
+      setError("Please enter your email address");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await resetPassword(resetEmail);
+      setResetMessage("Password reset email sent! Check your inbox.");
+    } catch (err) {
+      setError("Failed to send reset email: " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignup = async (e) => {
@@ -74,12 +108,21 @@ export default function Login() {
               <input type="password" placeholder="Password" required 
                  onChange={(e) => setPassword(e.target.value)} />
 
-              <p className="forgot-password" onClick={() => setForgotPassword(true)}>
+              <p className="forgot-password" onClick={() => { setError(""); setResetMessage(""); setForgotPassword(true); }}>
                 Forgot password?
               </p>
 
               <button type="submit" disabled={loading}>
                 {loading ? "Signing In..." : "Sign In"}
+              </button>
+
+              <button 
+                type="button" 
+                className="demo-login-btn" 
+                onClick={handleDemoLogin} 
+                disabled={loading}
+              >
+                🚀 1-Click Demo Login
               </button>
 
               <div className="social-divider">
@@ -97,17 +140,27 @@ export default function Login() {
               </button>
 
               <p className="switch-text">
-                New to Food Sync? <span onClick={() => setIsRegister(true)}>Create Account</span>
+                New to Food Sync? <span onClick={() => { setError(""); setIsRegister(true); }}>Create Account</span>
               </p>
             </form>
           ) : (
-            /* 🔁 RESET PASSWORD UI (Simplified) */
-            <form>
+            /* 🔁 RESET PASSWORD UI */
+            <form onSubmit={handleResetPassword}>
               <h1>Reset Password</h1>
-              <input type="email" placeholder="Email address" required />
-              <button type="button">Send Reset Link</button>
+              {error && <p style={{color:'#ffcdd2', fontSize:'0.8rem', margin:'4px 0'}}>{error}</p>}
+              {resetMessage && <p style={{color:'#bbf7d0', fontSize:'0.82rem', margin:'4px 0', fontWeight: 'bold'}}>{resetMessage}</p>}
+              <input 
+                type="email" 
+                placeholder="Email address" 
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                required 
+              />
+              <button type="submit" disabled={loading}>
+                {loading ? "Sending..." : "Send Reset Link"}
+              </button>
               <p className="switch-text">
-                <span onClick={() => setForgotPassword(false)}>Go back</span>
+                <span onClick={() => { setError(""); setResetMessage(""); setForgotPassword(false); }}>Go back to Sign In</span>
               </p>
             </form>
           )}

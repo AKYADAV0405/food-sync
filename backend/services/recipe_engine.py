@@ -142,20 +142,29 @@ def get_exact_recipe_image_url(recipe_name: str, existing_url: str = None) -> st
 def parse_ingredient_qty(ing_str):
     """
     Extracts '2 onions' -> name='onions', qty=2.0, unit='pieces'
+    Supports plurals and units: grams, tablespoons, teaspoons, cups, kg, etc.
     """
-    match = re.search(r"(\d+(?:[\.,]\d+)?(?:/\d+)?)\s*(tablespoon|tbsp|teaspoon|tsp|cup|g|gm|kg|ml|l|pcs|nos|piece|pieces)", ing_str, re.IGNORECASE)
+    unit_pattern = r"(tablespoons?|tbsp|teaspoons?|tsp|cups?|grams?|gm|gms|g|kilograms?|kg|kgs|milliliters?|ml|liters?|litres?|l|pcs|nos|pieces?|cloves?|pinches?|sprigs?|bunch(?:es)?)"
+    match = re.search(r"(\d+(?:[\.,]\d+)?(?:/\d+)?)\s*" + unit_pattern + r"\b", ing_str, re.IGNORECASE)
     qty = 1.0
     unit = "pieces" 
     name = ing_str
     
     if match:
         qty_str = match.group(1)
-        unit_str = match.group(2).lower()
-        if unit_str in ['gm', 'gms']: unit = 'g'
-        elif unit_str in ['pcs', 'nos', 'piece', 'pieces']: unit = 'pieces'
-        elif unit_str in ['tbsp']: unit = 'tablespoon'
-        elif unit_str in ['tsp']: unit = 'teaspoon'
-        else: unit = unit_str
+        unit_raw = match.group(2).lower()
+        if unit_raw in ['g', 'gm', 'gms', 'gram', 'grams']: unit = 'g'
+        elif unit_raw in ['kg', 'kgs', 'kilogram', 'kilograms']: unit = 'kg'
+        elif unit_raw in ['l', 'liter', 'liters', 'litre', 'litres']: unit = 'l'
+        elif unit_raw in ['ml', 'milliliter', 'milliliters']: unit = 'ml'
+        elif unit_raw in ['tbsp', 'tablespoon', 'tablespoons']: unit = 'tablespoon'
+        elif unit_raw in ['tsp', 'teaspoon', 'teaspoons']: unit = 'teaspoon'
+        elif unit_raw in ['cup', 'cups']: unit = 'cup'
+        elif unit_raw in ['pcs', 'nos', 'piece', 'pieces']: unit = 'pieces'
+        elif unit_raw in ['clove', 'cloves']: unit = 'cloves'
+        elif unit_raw in ['pinch', 'pinches']: unit = 'pinch'
+        elif unit_raw in ['sprig', 'sprigs']: unit = 'sprig'
+        else: unit = unit_raw
 
         try:
             if "/" in qty_str:

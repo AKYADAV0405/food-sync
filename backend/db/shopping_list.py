@@ -2,21 +2,24 @@
 from db.firestore import db
 
 def get_shopping_list(user_id):
-    list_ref = (
-        db.collection("users")
-        .document(user_id)
-        .collection("shopping_list")
-    )
-    docs = list_ref.stream()
     items = []
-    for doc in docs:
-        data = doc.to_dict() or {}
-        items.append({
-            "item": data.get("item", doc.id),
-            "quantity": data.get("quantity", 1.0),
-            "unit": data.get("unit", "pieces"),
-            "checked": data.get("checked", False)
-        })
+    try:
+        list_ref = (
+            db.collection("users")
+            .document(user_id)
+            .collection("shopping_list")
+        )
+        docs = list_ref.stream()
+        for doc in docs:
+            data = doc.to_dict() or {}
+            items.append({
+                "item": data.get("item", doc.id),
+                "quantity": data.get("quantity", 1.0),
+                "unit": data.get("unit", "pieces"),
+                "checked": data.get("checked", False)
+            })
+    except Exception as e:
+        print(f"[SHOPPING LIST WARNING] Firestore stream notice: {e}")
     return items
 
 def add_shopping_item(user_id, item, quantity=1.0, unit="pieces"):
