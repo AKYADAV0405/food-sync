@@ -137,9 +137,9 @@
 
 /* 👻 GHOST BUTTON IN OVERLAY */
 button.ghost {
-  background-color: transparent !important;
+  background: rgba(255, 255, 255, 0.95) !important;
   border: 2px solid #ffffff !important;
-  color: #ffffff !important;
+  color: #d84315 !important;
   font-size: 14px !important;
   font-weight: 700 !important;
   padding: 11px 36px !important;
@@ -148,12 +148,13 @@ button.ghost {
   border-radius: 30px !important;
   cursor: pointer !important;
   margin-top: 20px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
   transition: transform 0.2s ease, background-color 0.2s ease !important;
 }
 
 button.ghost:hover {
   background-color: #ffffff !important;
-  color: #e65100 !important;
+  color: #bf360c !important;
   transform: scale(1.04) !important;
 }
 
@@ -232,6 +233,7 @@ button.ghost:active {
   left: 0;
   transform: translateX(0);
   opacity: 1;
+  visibility: visible;
   z-index: 2;
   pointer-events: auto;
 }
@@ -241,6 +243,7 @@ button.ghost:active {
   left: 0;
   transform: translateX(-100%);
   opacity: 0;
+  visibility: hidden;
   z-index: 1;
   pointer-events: none;
 }
@@ -249,6 +252,7 @@ button.ghost:active {
 .login-container.active .sign-in {
   transform: translateX(100%);
   opacity: 0;
+  visibility: hidden;
   z-index: 1;
   pointer-events: none;
 }
@@ -256,7 +260,8 @@ button.ghost:active {
 .login-container.active .sign-up {
   transform: translateX(100%);
   opacity: 1;
-  z-index: 2;
+  visibility: visible;
+  z-index: 5;
   pointer-events: auto;
 }
 
@@ -270,7 +275,7 @@ button.ghost:active {
   overflow: hidden;
 
   transition: transform 0.6s ease-in-out;
-  z-index: 10;
+  z-index: 100;
   pointer-events: auto;
 }
 

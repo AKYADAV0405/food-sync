@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { onSnapshot, collection } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -151,6 +152,7 @@ const formatQty = (qty) => {
 
 export default function Inventory() {
   const { getAuthHeaders, currentUser } = useAuth();
+  const navigate = useNavigate();
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [cameraDevices, setCameraDevices] = useState([]);
@@ -715,13 +717,13 @@ export default function Inventory() {
           ))}
         </div>
         <form className="inventory-form" onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className="form-group" style={{ position: "relative" }}>
             <label htmlFor="item">Item Name</label>
             <input
               id="item"
               type="text"
               value={form.item}
-              list="inventory-suggestions"
+              autoComplete="off"
               placeholder="e.g. Organic Tomatoes / Paneer"
               onChange={(e) => {
                 const value = e.target.value;
@@ -731,13 +733,64 @@ export default function Inventory() {
                   canonicalItem: "",
                 }));
               }}
-              onBlur={(e) => applyDefaultUnitIfMatch(e.target.value)}
+              onBlur={(e) => {
+                // Slight timeout to allow clicking a suggestion before hiding
+                setTimeout(() => applyDefaultUnitIfMatch(e.target.value), 200);
+              }}
             />
-            <datalist id="inventory-suggestions">
-              {suggestionLabels.map((label) => (
-                <option value={label} key={label} />
-              ))}
-            </datalist>
+            {suggestions.length > 0 && form.item.trim().length > 0 && (
+              <div 
+                className="suggestions-dropdown"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  right: 0,
+                  zIndex: 50,
+                  background: "#ffffff",
+                  borderRadius: "10px",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
+                  border: "1px solid #e2e8f0",
+                  maxHeight: "220px",
+                  overflowY: "auto",
+                  marginTop: "4px"
+                }}
+              >
+                {suggestions.map((s, idx) => (
+                  <div
+                    key={idx}
+                    onMouseDown={() => {
+                      setForm((prev) => ({
+                        ...prev,
+                        item: s.display || s.canonical,
+                        canonicalItem: s.canonical || s.display,
+                        unit: s.default_unit || prev.unit,
+                        category: s.category || prev.category
+                      }));
+                      setSuggestions([]);
+                    }}
+                    style={{
+                      padding: "10px 14px",
+                      cursor: "pointer",
+                      borderBottom: "1px solid #f1f5f9",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      fontSize: "0.9rem",
+                      color: "#1e293b",
+                      transition: "background 0.15s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "#ffffff"}
+                  >
+                    <span style={{ fontWeight: 600 }}>{s.display || s.canonical}</span>
+                    <span style={{ fontSize: "0.75rem", color: "#64748b", background: "#f1f5f9", padding: "2px 8px", borderRadius: "12px" }}>
+                      {s.default_unit || "pieces"} • {s.category || "item"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="form-group inline">
@@ -1022,6 +1075,27 @@ export default function Inventory() {
                                   aria-label={`Increase ${item.item}`}
                                 >
                                   +
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => navigate("/donations")}
+                                  title="Donate surplus to community"
+                                  style={{
+                                    marginLeft: "auto",
+                                    background: "rgba(16, 185, 129, 0.12)",
+                                    border: "1px solid #10b981",
+                                    color: "#10b981",
+                                    borderRadius: "8px",
+                                    padding: "4px 8px",
+                                    fontSize: "0.75rem",
+                                    fontWeight: 700,
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "3px"
+                                  }}
+                                >
+                                  🌱 Donate
                                 </button>
                               </div>
                             </div>

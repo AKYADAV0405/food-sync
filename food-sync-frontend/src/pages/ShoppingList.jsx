@@ -164,8 +164,10 @@ export default function ShoppingList() {
   return (
     <div className="shopping-list-page">
       <header className="inventory-header">
-         <h1>🛒 Shopping List</h1>
-         <p>Plan your next grocery run. Checked items move to Inventory.</p>
+         <h1 style={{ color: "#ffffff", textShadow: "0 2px 10px rgba(0,0,0,0.6)" }}>🛒 Shopping List</h1>
+         <p style={{ color: "#f8fafc", fontWeight: 600, background: "rgba(15, 23, 42, 0.4)", backdropFilter: "blur(8px)", display: "inline-block", padding: "4px 16px", borderRadius: "16px", margin: "6px auto", textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+           Plan your next grocery run. Checked items move directly into your Inventory.
+         </p>
       </header>
 
       {/* Add Item Form */}

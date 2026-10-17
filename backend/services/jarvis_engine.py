@@ -24,6 +24,12 @@ class NutritionBreakdown(BaseModel):
     carbs: str = Field(description="Estimated carbohydrates, e.g., '40g'")
     fat: str = Field(description="Estimated fat, e.g., '10g'")
 
+class KitchenAnalysis(BaseModel):
+    expiring_items_prioritized: List[str] = Field(default_factory=list, description="Pantry items requiring immediate cooking due to expiration urgency")
+    substitution_reasoning: str | None = Field(default=None, description="Smart culinary alternatives if an ingredient is missing or swapped")
+    sensory_checkpoint: str | None = Field(default=None, description="Sensory cues to watch for: what to smell, hear (sizzle), or see (golden brown)")
+    suggested_timers: List[dict] = Field(default_factory=list, description="List of timers: [{'label': 'Sauté aromatics', 'duration_seconds': 240}]")
+
 class JarvisResponse(BaseModel):
     voice_greeting: str = Field(description="A friendly voice greeting or response that the companion will read out loud.")
     is_new_recipe: bool = Field(description="Set to True ONLY if the user explicitly requested a recipe, specified an ingredient, or asked what to cook. Set to False for chat, greetings, rejections, questions, or noise.")
@@ -33,6 +39,8 @@ class JarvisResponse(BaseModel):
     instructions: List[str] | None = Field(default=None, description="Step-by-step instructions.")
     health_benefits: str | None = Field(default=None, description="A brief explanation of why this recipe is healthy.")
     learned_fact: str | None = Field(default=None, description="A single short sentence summarizing any new preference.")
+    kitchen_analysis: KitchenAnalysis | None = Field(default=None, description="Structured kitchen telemetry analysis, timers, and sensory checkpoints.")
+
 
 class IdentifiedCounterIngredients(BaseModel):
     identified_ingredients: List[str] = Field(description="List of raw or prepped food ingredients visually identified on the kitchen counter.")
@@ -308,6 +316,7 @@ Client Time: {client_time}
             response_format={"type": "json_object"}
         )
         resp_data = json.loads(response.choices[0].message.content)
+        _persist_and_enrich_jarvis(resp_data, user_id, inventory)
         return resp_data
     except Exception as ollama_err:
         print(f"[OLLAMA NOTICE] Local Ollama unavailable ({ollama_err}). Trying Gemini 2.5 Flash API fallback...")
@@ -339,12 +348,75 @@ Client Time: {client_time}
                 )
             )
             resp_data = json.loads(g_response.text)
+            _persist_and_enrich_jarvis(resp_data, user_id, inventory)
             return resp_data
         except Exception as gemini_err:
             print(f"[GEMINI NOTICE] Gemini API fallback error ({gemini_err}). Running intent-based smart simulated mode...")
 
     # 3. Intent-Based Smart Simulated Fallback
-    return generate_dynamic_simulated_response(query, client_time, inventory, p_data, language=language)
+    sim_data = generate_dynamic_simulated_response(query, client_time, inventory, p_data, language=language)
+    _persist_and_enrich_jarvis(sim_data, user_id, inventory)
+    return sim_data
+
+
+def _persist_and_enrich_jarvis(resp_data: dict, user_id: str | None, inventory: list):
+    """Persist learned_fact to Firestore learned_memory and ensure kitchen_analysis is populated."""
+    if not isinstance(resp_data, dict):
+        return
+
+    # 1. Persist learned_fact to Firestore
+    learned = resp_data.get("learned_fact")
+    if user_id and learned and isinstance(learned, str) and learned.strip():
+        try:
+            mem_ref = db.collection("users").document(user_id).collection("profile").document("learned_memory")
+            doc = mem_ref.get()
+            current_mem = doc.to_dict().get("memory", "") if doc.exists else ""
+            if learned.strip().lower() not in current_mem.lower():
+                updated_mem = f"{current_mem}\n- {learned.strip()} ({datetime.utcnow().strftime('%Y-%m-%d')})".strip()
+                mem_ref.set({
+                    "memory": updated_mem,
+                    "updated_at": datetime.utcnow().isoformat()
+                }, merge=True)
+        except Exception as pe:
+            print(f"[JARVIS MEMORY PERSIST WARN] {pe}")
+
+    # 2. Enrich kitchen_analysis if missing or partial
+    analysis = resp_data.get("kitchen_analysis") or {}
+    if not isinstance(analysis, dict):
+        analysis = {}
+
+    # Extract expiring items from inventory
+    if not analysis.get("expiring_items_prioritized"):
+        exp_items = []
+        for it in (inventory or []):
+            d_left = it.get("days_left", 7)
+            if d_left <= 3:
+                exp_items.append(f"{it.get('item', '').title()} ({d_left}d left)")
+        analysis["expiring_items_prioritized"] = exp_items[:3]
+
+    # Checkpoint sensory cues
+    if not analysis.get("sensory_checkpoint"):
+        analysis["sensory_checkpoint"] = "Watch for aromatic steam, light golden browning, and oil separating slightly along pan perimeter."
+
+    if not analysis.get("substitution_reasoning"):
+        analysis["substitution_reasoning"] = "Can substitute oil with ghee, or heavy cream with whipped yogurt/curd for lighter acidity."
+
+    # Generate suggested timers from instructions if empty
+    if not analysis.get("suggested_timers"):
+        timers = []
+        instructions = resp_data.get("instructions") or []
+        for step in instructions:
+            match = re.search(r"(\d+)\s*(?:-\s*(\d+))?\s*(?:mins?|minutes?)", step, re.IGNORECASE)
+            if match:
+                dur_mins = int(match.group(2) or match.group(1))
+                label = step[:30].strip() + ("..." if len(step) > 30 else "")
+                timers.append({"label": label, "duration_seconds": dur_mins * 60})
+        if not timers:
+            timers = [{"label": "Sauté aromatics", "duration_seconds": 180}, {"label": "Simmer dish", "duration_seconds": 480}]
+        analysis["suggested_timers"] = timers[:3]
+
+    resp_data["kitchen_analysis"] = analysis
+
 
 # -------- 🎥 VISUAL INTENT CLASSIFICATION HELPER FUNCTIONS -------- #
 

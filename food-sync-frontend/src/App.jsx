@@ -15,6 +15,7 @@ import MealPlanning from "./pages/MealPlanning";
 import ShoppingList from "./pages/ShoppingList";
 import Assistant from "./pages/Assistant";
 import Profile from "./pages/Profile";
+import Donations from "./pages/Donations";
 
 // Components
 import HeaderNav from "./components/HeaderNav";
@@ -102,7 +103,7 @@ function App() {
             <Route path="/recipes" element={<Recipes />} />
             <Route path="/meal-planning" element={<MealPlanning />} />
             <Route path="/shopping-list" element={<ShoppingList />} />
-            <Route path="/donations" element={<Navigate to="/recipes" replace />} />
+            <Route path="/donations" element={<Donations />} />
 
             {/* 👇 ADDED ASSISTANT ROUTE 👇 */}
             <Route path="/assistant" element={<Assistant />} />

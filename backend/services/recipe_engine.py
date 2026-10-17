@@ -139,32 +139,50 @@ def get_exact_recipe_image_url(recipe_name: str, existing_url: str = None) -> st
 
 
 # --- PARSING HELPER ---
-def parse_ingredient_qty(ing_str):
+def parse_ingredient_qty(ing_str: str):
     """
-    Extracts '2 onions' -> name='onions', qty=2.0, unit='pieces'
-    Supports plurals and units: grams, tablespoons, teaspoons, cups, kg, etc.
+    Extracts ingredient name, quantity, and unit.
+    Uses word boundaries and plural-aware regex to prevent matching 'g' inside 'grams'.
+    Normalizes units:
+      ['gram', 'grams', 'gm', 'gms', 'g'] -> 'g'
+      ['kilogram', 'kilograms', 'kgs', 'kg'] -> 'kg'
+      ['liter', 'liters', 'ltr', 'l'] -> 'liter'
+      ['milliliter', 'milliliters', 'ml'] -> 'ml'
+      ['tablespoon', 'tablespoons', 'tbsp'] -> 'tbsp'
+      ['teaspoon', 'teaspoons', 'tsp'] -> 'tsp'
+      ['cup', 'cups'] -> 'cup'
+      ['pc', 'pcs', 'nos', 'piece', 'pieces', 'packet', 'packets', 'pkt', 'clove', 'cloves', 'slice', 'slices', 'sprig', 'sprigs', 'bunch', 'bunches'] -> 'pieces'
     """
-    unit_pattern = r"(tablespoons?|tbsp|teaspoons?|tsp|cups?|grams?|gm|gms|g|kilograms?|kg|kgs|milliliters?|ml|liters?|litres?|l|pcs|nos|pieces?|cloves?|pinches?|sprigs?|bunch(?:es)?)"
-    match = re.search(r"(\d+(?:[\.,]\d+)?(?:/\d+)?)\s*" + unit_pattern + r"\b", ing_str, re.IGNORECASE)
+    if not ing_str or not isinstance(ing_str, str):
+        return "", 1.0, "pieces"
+
+    unit_pattern = r"(tablespoons?|tbsp|teaspoons?|tsp|cups?|grams?|gms?|g|kilograms?|kgs?|kg|milliliters?|ml|liters?|ltr|l|pcs|nos|pieces?|packets?|pkt|pinch(?:es)?|cloves?|slices?|sprigs?|bunch(?:es)?)"
+    match = re.search(r"(\d+(?:[\.,]\d+)?(?:\s*/\s*\d+)?)\s*" + unit_pattern + r"\b", ing_str, re.IGNORECASE)
     qty = 1.0
-    unit = "pieces" 
+    unit = "pieces"
     name = ing_str
-    
+
     if match:
-        qty_str = match.group(1)
+        qty_str = match.group(1).replace(" ", "")
         unit_raw = match.group(2).lower()
-        if unit_raw in ['g', 'gm', 'gms', 'gram', 'grams']: unit = 'g'
-        elif unit_raw in ['kg', 'kgs', 'kilogram', 'kilograms']: unit = 'kg'
-        elif unit_raw in ['l', 'liter', 'liters', 'litre', 'litres']: unit = 'l'
-        elif unit_raw in ['ml', 'milliliter', 'milliliters']: unit = 'ml'
-        elif unit_raw in ['tbsp', 'tablespoon', 'tablespoons']: unit = 'tablespoon'
-        elif unit_raw in ['tsp', 'teaspoon', 'teaspoons']: unit = 'teaspoon'
-        elif unit_raw in ['cup', 'cups']: unit = 'cup'
-        elif unit_raw in ['pcs', 'nos', 'piece', 'pieces']: unit = 'pieces'
-        elif unit_raw in ['clove', 'cloves']: unit = 'cloves'
-        elif unit_raw in ['pinch', 'pinches']: unit = 'pinch'
-        elif unit_raw in ['sprig', 'sprigs']: unit = 'sprig'
-        else: unit = unit_raw
+        if unit_raw in ['gram', 'grams', 'gm', 'gms', 'g']:
+            unit = 'g'
+        elif unit_raw in ['kilogram', 'kilograms', 'kgs', 'kg']:
+            unit = 'kg'
+        elif unit_raw in ['liter', 'liters', 'ltr', 'l', 'litres?']:
+            unit = 'liter'
+        elif unit_raw in ['milliliter', 'milliliters', 'ml']:
+            unit = 'ml'
+        elif unit_raw in ['tablespoon', 'tablespoons', 'tbsp']:
+            unit = 'tbsp'
+        elif unit_raw in ['teaspoon', 'teaspoons', 'tsp']:
+            unit = 'tsp'
+        elif unit_raw in ['cup', 'cups']:
+            unit = 'cup'
+        elif unit_raw in ['pc', 'pcs', 'nos', 'piece', 'pieces', 'packet', 'packets', 'pkt', 'clove', 'cloves', 'slice', 'slices', 'pinch', 'pinches', 'sprig', 'sprigs', 'bunch', 'bunches']:
+            unit = 'pieces'
+        else:
+            unit = unit_raw
 
         try:
             if "/" in qty_str:
@@ -174,11 +192,15 @@ def parse_ingredient_qty(ing_str):
                 qty = float(qty_str.replace(',', '.'))
         except ValueError:
             qty = 1.0
-            
+
         name = ing_str.replace(match.group(0), "").strip()
-        name = re.sub(r"\s+of\s+", " ", name, flags=re.IGNORECASE).strip()
-        name = name.strip(" ,.-")
-    
+
+    # Clean descriptor phrases and standalone trailing numbers
+    name = re.sub(r"\b(to taste|finely chopped|chopped|cubed|sliced|minced|grated|peeled|diced|as needed|for garnish|fresh|organic|roughly)\b", "", name, flags=re.IGNORECASE)
+    name = re.sub(r"\s+of\s+", " ", name, flags=re.IGNORECASE).strip()
+    name = re.sub(r"\b\d+(?:[\.,]\d+)?\b$", "", name).strip()
+    name = name.strip(" ,.-/()[]")
+
     return name, qty, unit
 
 def load_recipe_database():
@@ -629,8 +651,30 @@ def generate_market_depletion_meal_plan(
                                     })
 
                     if not is_pre_market or not any(p in ing_name for p in stock_tracker if stock_tracker[p] > 0):
-                        if ing_name and ing_name not in COMMON_STAPLES:
-                            market_shopping_list[ing_name] = market_shopping_list.get(ing_name, 0.0) + ing_qty
+                        if ing_name and ing_name not in COMMON_STAPLES and not any(st in ing_name for st in COMMON_STAPLES):
+                            from services.food_index import resolve_food, get_item_metadata, convert_to_store_unit
+                            resolved = resolve_food(ing_name)
+                            canonical = resolved["canonical"] if resolved else ing_name.title().strip()
+                            meta = get_item_metadata(canonical) if resolved else None
+                            
+                            ing_unit = ing.get("unit", "pieces")
+                            std_qty = ing_qty
+                            std_unit = meta.get("store_unit", ing_unit) if meta else ing_unit
+                            
+                            if meta:
+                                try:
+                                    std_qty = convert_to_store_unit(ing_qty, ing_unit, meta)
+                                except Exception:
+                                    std_qty = ing_qty
+                            
+                            if canonical in market_shopping_list:
+                                market_shopping_list[canonical]["quantity"] += std_qty
+                            else:
+                                market_shopping_list[canonical] = {
+                                    "item": canonical,
+                                    "quantity": std_qty,
+                                    "unit": std_unit
+                                }
 
         plan.append(day_entry)
 
@@ -639,8 +683,8 @@ def generate_market_depletion_meal_plan(
     zero_waste_score = round((depleted_urgent / total_urgent * 100), 0) if total_urgent > 0 else 100
 
     shopping_list_formatted = [
-        {"item": k.capitalize(), "quantity": round(v, 2), "unit": "unit"}
-        for k, v in market_shopping_list.items()
+        {"item": v["item"].title(), "quantity": round(v["quantity"], 2), "unit": v["unit"]}
+        for v in market_shopping_list.values()
     ]
 
     total_meals = days * 3

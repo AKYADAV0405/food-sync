@@ -251,8 +251,10 @@ export default function Profile() {
       <header className="profile-header">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
           <div>
-            <h1>👤 Culinary Profile & Preferences</h1>
-            <p>Customize your dietary profile, household size, kitchen tools, and regional flavor preferences.</p>
+            <h1 style={{ color: "#ffffff", textShadow: "0 2px 10px rgba(0,0,0,0.6)" }}>👤 Culinary Profile & Preferences</h1>
+            <p style={{ color: "#f8fafc", fontWeight: 600, background: "rgba(15, 23, 42, 0.45)", backdropFilter: "blur(8px)", display: "inline-block", padding: "4px 16px", borderRadius: "16px", margin: "6px 0", textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+              Customize your dietary profile, household size, kitchen tools, and regional flavor preferences.
+            </p>
           </div>
           <button onClick={handleLogout} className="profile-top-logout-btn">
             🚪 Sign Out

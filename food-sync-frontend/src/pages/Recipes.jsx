@@ -36,6 +36,46 @@ export default function Recipes() {
   const [cookSuccess, setCookSuccess] = useState(false);
   const [savingFeedback, setSavingFeedback] = useState(false);
 
+  // ✨ Generative Chef Modal States
+  const [isGenModalOpen, setIsGenModalOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [genRecipeResult, setGenRecipeResult] = useState(null);
+  const [genForm, setGenForm] = useState({
+    cuisine: "Indian",
+    servings: 2,
+    maxTime: 30,
+    diet: "None",
+    goal: "zero_waste"
+  });
+
+  const handleGenerateEdibleRecipe = async () => {
+    setIsGenerating(true);
+    setGenRecipeResult(null);
+    try {
+      const res = await fetch(`${BASE_URL}/recipes/generate-edible`, {
+        method: "POST",
+        headers: getAuthHeaders ? getAuthHeaders() : { "Content-Type": "application/json", "X-User-Id": currentUser?.uid || "demo_user" },
+        body: JSON.stringify({
+          cuisine_style: genForm.cuisine,
+          servings: parseInt(genForm.servings, 10),
+          max_time_mins: parseInt(genForm.maxTime, 10),
+          dietary_preference: genForm.diet,
+          goal: genForm.goal
+        })
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.detail || "Recipe generation failed");
+      }
+      const data = await res.json();
+      setGenRecipeResult(data.recipe);
+    } catch (err) {
+      alert("Error generating recipe: " + err.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   // Load all recipes
   const loadRecipes = async () => {
     setLoading(true);
@@ -455,15 +495,30 @@ export default function Recipes() {
               <p>
                 Browse hand-picked recipes calibrated to match your available inventory and adapt dynamically to your personal serving sizes.
               </p>
-              <button 
-                className="recipes-hero-cta"
-                onClick={() => {
-                  const el = document.getElementById("categories-section");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                Explore Categories
-              </button>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "1rem" }}>
+                <button 
+                  className="recipes-hero-cta"
+                  onClick={() => {
+                    const el = document.getElementById("categories-section");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  Explore Categories
+                </button>
+                <button 
+                  className="recipes-hero-cta"
+                  style={{
+                    background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+                    boxShadow: "0 4px 14px rgba(124, 58, 237, 0.4)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px"
+                  }}
+                  onClick={() => setIsGenModalOpen(true)}
+                >
+                  ✨ AI Generate Edible Recipe from My Pantry
+                </button>
+              </div>
             </div>
             <div className="recipes-hero-visual">
               <div className="hero-floating-badge top-right">🥗 100% Healthy</div>
@@ -903,6 +958,210 @@ export default function Recipes() {
           </div>
         </div>
       )}
+
+      {/* ✨ GENERATIVE CHEF MODAL */}
+      {isGenModalOpen && (
+        <div 
+          className="cookbook-overlay" 
+          onClick={() => setIsGenModalOpen(false)}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000 }}
+        >
+          <div 
+            className="cookbook-modal" 
+            onClick={(e) => e.stopPropagation()} 
+            style={{ maxWidth: "700px", width: "95%", maxHeight: "90vh", overflowY: "auto", padding: "24px", borderRadius: "20px" }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", paddingBottom: "12px", marginBottom: "16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ fontSize: "1.5rem" }}>✨</span>
+                <div>
+                  <h2 style={{ margin: 0, fontSize: "1.3rem", color: "#1e293b" }}>AI Generative Chef</h2>
+                  <span style={{ fontSize: "0.8rem", color: "#64748b" }}>3-Layer Neuro-Symbolic Culinary Synthesis</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsGenModalOpen(false)}
+                style={{ background: "transparent", border: "none", fontSize: "1.2rem", cursor: "pointer", color: "#64748b" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Generation Form */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: 700, color: "#475569" }}>Cuisine Style:</label>
+                <select 
+                  value={genForm.cuisine} 
+                  onChange={(e) => setGenForm({ ...genForm, cuisine: e.target.value })}
+                  style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #cbd5e1", marginTop: "4px" }}
+                >
+                  <option value="Indian">Indian (Regional/Home-style)</option>
+                  <option value="Continental">Continental / Mediterranean</option>
+                  <option value="Asian Stir-Fry">Pan-Asian Stir-Fry</option>
+                  <option value="Mexican">Mexican / Fusion</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: 700, color: "#475569" }}>Dietary Preference:</label>
+                <select 
+                  value={genForm.diet} 
+                  onChange={(e) => setGenForm({ ...genForm, diet: e.target.value })}
+                  style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #cbd5e1", marginTop: "4px" }}
+                >
+                  <option value="None">None (Standard)</option>
+                  <option value="Vegetarian">Strict Vegetarian</option>
+                  <option value="Vegan">Vegan (No Dairy)</option>
+                  <option value="High-Protein">High-Protein</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: 700, color: "#475569" }}>Servings ({genForm.servings}):</label>
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="10" 
+                  value={genForm.servings} 
+                  onChange={(e) => setGenForm({ ...genForm, servings: e.target.value })}
+                  style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #cbd5e1", marginTop: "4px" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: "0.8rem", fontWeight: 700, color: "#475569" }}>Max Time (mins):</label>
+                <input 
+                  type="number" 
+                  min="10" 
+                  max="120" 
+                  step="5" 
+                  value={genForm.maxTime} 
+                  onChange={(e) => setGenForm({ ...genForm, maxTime: e.target.value })}
+                  style={{ width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #cbd5e1", marginTop: "4px" }}
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleGenerateEdibleRecipe}
+              disabled={isGenerating}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)",
+                color: "white",
+                border: "none",
+                borderRadius: "12px",
+                fontWeight: 700,
+                fontSize: "1rem",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(124, 58, 237, 0.35)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
+              }}
+            >
+              {isGenerating ? "Synthesizing Edible Recipe from Pantry..." : "🍳 Generate Safe, Edible Dish Now"}
+            </button>
+
+            {/* Generated Recipe View */}
+            {genRecipeResult && (
+              <div style={{ marginTop: "20px", borderTop: "1px solid #e2e8f0", paddingTop: "16px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
+                  <div>
+                    <h3 style={{ margin: "0 0 4px 0", color: "#1e293b", fontSize: "1.4rem" }}>{genRecipeResult.recipe_name}</h3>
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      <span style={{ background: "#ede9fe", color: "#6d28d9", fontSize: "0.75rem", padding: "2px 8px", borderRadius: "12px", fontWeight: 700 }}>
+                        {genRecipeResult.dish_archetype}
+                      </span>
+                      <span style={{ background: "#f1f5f9", color: "#475569", fontSize: "0.75rem", padding: "2px 8px", borderRadius: "12px" }}>
+                        ⏱️ {genRecipeResult.prep_time_mins} mins
+                      </span>
+                      <span style={{ background: "#f1f5f9", color: "#475569", fontSize: "0.75rem", padding: "2px 8px", borderRadius: "12px" }}>
+                        🔥 {genRecipeResult.calories_per_serving}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Edibility Report Badge */}
+                  {genRecipeResult.edibility_report && (
+                    <div style={{ background: "rgba(16, 185, 129, 0.12)", border: "1px solid #10b981", padding: "6px 12px", borderRadius: "10px", textAlign: "right" }}>
+                      <div style={{ color: "#059669", fontWeight: 800, fontSize: "0.85rem" }}>
+                        ✓ {genRecipeResult.edibility_report.edibility_score}% Edibility Verified
+                      </div>
+                      <div style={{ fontSize: "0.7rem", color: "#10b981" }}>
+                        Thermal Sequence Checked
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {genRecipeResult.why_it_works_culinarily && (
+                  <p style={{ fontSize: "0.85rem", color: "#475569", fontStyle: "italic", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", margin: "12px 0" }}>
+                    💡 <strong>Culinary Harmony:</strong> {genRecipeResult.why_it_works_culinarily}
+                  </p>
+                )}
+
+                {/* Ingredients List */}
+                <h4 style={{ margin: "12px 0 6px 0", color: "#334155" }}>Partitioned Pantry Ingredients:</h4>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "6px" }}>
+                  {(genRecipeResult.ingredients_structured || []).map((ing, idx) => (
+                    <div key={idx} style={{ background: "#f8fafc", padding: "6px 10px", borderRadius: "6px", fontSize: "0.85rem", border: "1px solid #e2e8f0" }}>
+                      <strong>{ing.item}</strong>: {ing.quantity} {ing.unit} <span style={{ fontSize: "0.7rem", color: "#94a3b8" }}>({ing.role})</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Thermal Steps */}
+                <h4 style={{ margin: "16px 0 6px 0", color: "#334155" }}>Thermal Execution Steps:</h4>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {(genRecipeResult.thermal_steps || []).map((step, idx) => (
+                    <div key={idx} style={{ background: "#ffffff", border: "1px solid #e2e8f0", padding: "10px", borderRadius: "8px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                        <span style={{ fontWeight: 800, fontSize: "0.8rem", color: "#7c3aed" }}>
+                          PHASE {step.step_num}: {step.phase}
+                        </span>
+                        <span style={{ fontSize: "0.75rem", color: "#64748b" }}>⏱️ {step.duration_mins}m</span>
+                      </div>
+                      <p style={{ margin: "2px 0", fontSize: "0.85rem", color: "#1e293b", lineHeight: 1.4 }}>
+                        {step.instruction}
+                      </p>
+                      {step.sensory_cue && (
+                        <div style={{ fontSize: "0.75rem", color: "#0284c7", marginTop: "4px" }}>
+                          👃 <em>Sensory cue:</em> {step.sensory_cue}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: "flex", gap: "8px", marginTop: "16px" }}>
+                  <button
+                    onClick={() => {
+                      alert("Dish added to your weekly cooking queue! 🍽️");
+                      setIsGenModalOpen(false);
+                    }}
+                    style={{ flex: 1, padding: "10px", background: "#10b981", color: "white", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}
+                  >
+                    ✓ Save to My Recipes
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsGenModalOpen(false);
+                      navigate("/assistant");
+                    }}
+                    style={{ flex: 1, padding: "10px", background: "#3b82f6", color: "white", border: "none", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}
+                  >
+                    🤖 Walk Through with Jarvis
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+}

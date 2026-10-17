@@ -182,6 +182,47 @@ export default function Assistant() {
   const [isCooked, setIsCooked] = useState(false);
   const [cookLoading, setCookLoading] = useState(false);
 
+  // Jarvis Kitchen Analysis & Live Timers
+  const [kitchenAnalysis, setKitchenAnalysis] = useState(null);
+  const [activeTimers, setActiveTimers] = useState([]);
+
+  // Active timers interval tick
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      setActiveTimers((prev) =>
+        prev.map((t) => {
+          if (!t.isRunning || t.remaining <= 0) return t;
+          const nextRemaining = t.remaining - 1;
+          if (nextRemaining === 0) {
+            // Sound audio alert when timer hits 0
+            try {
+              const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+              const osc = audioCtx.createOscillator();
+              const gain = audioCtx.createGain();
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+              gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+              osc.connect(gain);
+              gain.connect(audioCtx.destination);
+              osc.start();
+              osc.stop(audioCtx.currentTime + 0.8);
+            } catch (e) {
+              console.warn("AudioContext error:", e);
+            }
+            if ("Notification" in window && Notification.permission === "granted") {
+              new Notification(`⏰ Kitchen Timer Done: ${t.label}!`, {
+                body: "Your step is complete. Check your pan or dish!",
+                icon: "/favicon.ico"
+              });
+            }
+          }
+          return { ...t, remaining: nextRemaining, isRunning: nextRemaining > 0 };
+        })
+      );
+    }, 1000);
+    return () => clearInterval(timerInterval);
+  }, []);
+
   // Vision AI Action states
   const [isScanningCounter, setIsScanningCounter] = useState(false);
   const [isCheckingDoneness, setIsCheckingDoneness] = useState(false);
@@ -662,6 +703,26 @@ export default function Assistant() {
         setIsCooked(false);
         if (data.nutrition) {
           setNutritionData(data.nutrition);
+        }
+      }
+
+      // Update Jarvis Kitchen Analysis telemetry
+      if (data.kitchen_analysis) {
+        setKitchenAnalysis(data.kitchen_analysis);
+        if (data.kitchen_analysis.suggested_timers && data.kitchen_analysis.suggested_timers.length > 0) {
+          setActiveTimers((prev) => {
+            const existingLabels = new Set(prev.map((t) => t.label));
+            const newTimers = data.kitchen_analysis.suggested_timers
+              .filter((t) => !existingLabels.has(t.label))
+              .map((t) => ({
+                id: `timer-${Date.now()}-${Math.random()}`,
+                label: t.label,
+                duration: t.duration_seconds,
+                remaining: t.duration_seconds,
+                isRunning: true
+              }));
+            return [...prev, ...newTimers];
+          });
         }
       }
 
@@ -1374,6 +1435,98 @@ export default function Assistant() {
             STATUS: <span className={isListening || isSpeaking ? "status-glow" : ""}>{getVoiceStateLabel()}</span>
           </div>
         </div>
+
+        {/* 🧠 JARVIS KITCHEN ANALYSIS & LIVE TIMERS */}
+        {kitchenAnalysis && (
+          <div className="jarvis-panel" style={{ border: "1px solid rgba(0, 240, 255, 0.4)", background: "rgba(10, 25, 47, 0.85)" }}>
+            <div className="jarvis-stage-heading" style={{ color: "#00f0ff", marginBottom: "0.5rem" }}>
+              <span>🧠 JARVIS KITCHEN ANALYSIS</span>
+            </div>
+            {kitchenAnalysis.expiring_items_prioritized && kitchenAnalysis.expiring_items_prioritized.length > 0 && (
+              <div style={{ marginBottom: "8px" }}>
+                <span style={{ fontSize: "0.75rem", color: "#f87171", fontWeight: 700 }}>⚠️ EXPIRING ITEMS PRIORITIZED:</span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "4px" }}>
+                  {kitchenAnalysis.expiring_items_prioritized.map((item, idx) => (
+                    <span key={idx} style={{ background: "rgba(239, 68, 68, 0.2)", color: "#fca5a5", fontSize: "0.72rem", padding: "2px 6px", borderRadius: "4px", border: "1px solid rgba(239, 68, 68, 0.4)" }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {kitchenAnalysis.sensory_checkpoint && (
+              <div style={{ marginBottom: "8px", fontSize: "0.8rem", color: "#cbd5e1" }}>
+                <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: "0.75rem", display: "block" }}>👃 SENSORY CHECKPOINT:</span>
+                <p style={{ margin: "2px 0 0 0", fontStyle: "italic", lineHeight: 1.3 }}>{kitchenAnalysis.sensory_checkpoint}</p>
+              </div>
+            )}
+            {kitchenAnalysis.substitution_reasoning && (
+              <div style={{ fontSize: "0.8rem", color: "#cbd5e1" }}>
+                <span style={{ color: "#fbbf24", fontWeight: 700, fontSize: "0.75rem", display: "block" }}>🔄 SUBSTITUTION REASONING:</span>
+                <p style={{ margin: "2px 0 0 0", lineHeight: 1.3 }}>{kitchenAnalysis.substitution_reasoning}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ⏰ LIVE KITCHEN TIMERS */}
+        {activeTimers.length > 0 && (
+          <div className="jarvis-panel" style={{ border: "1px solid rgba(245, 158, 11, 0.4)", background: "rgba(25, 20, 10, 0.85)" }}>
+            <div className="jarvis-stage-heading" style={{ color: "#f59e0b", marginBottom: "0.5rem" }}>
+              <span>⏱️ LIVE KITCHEN TIMERS</span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {activeTimers.map((timer) => {
+                const mins = Math.floor(timer.remaining / 60);
+                const secs = timer.remaining % 60;
+                const timeStr = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+                return (
+                  <div key={timer.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,0.06)", padding: "8px 10px", borderRadius: "8px" }}>
+                    <div>
+                      <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#f8fafc" }}>{timer.label}</div>
+                      <div style={{ fontSize: "1.1rem", fontFamily: "monospace", fontWeight: 800, color: timer.remaining <= 10 ? "#ef4444" : "#f59e0b" }}>
+                        {timeStr}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: "4px" }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTimers((prev) =>
+                            prev.map((t) => t.id === timer.id ? { ...t, isRunning: !t.isRunning } : t)
+                          );
+                        }}
+                        style={{ padding: "4px 8px", fontSize: "0.7rem", borderRadius: "4px", border: "none", cursor: "pointer", background: timer.isRunning ? "#eab308" : "#22c55e", color: "white", fontWeight: "bold" }}
+                      >
+                        {timer.isRunning ? "Pause" : "Start"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTimers((prev) =>
+                            prev.map((t) => t.id === timer.id ? { ...t, remaining: t.duration, isRunning: false } : t)
+                          );
+                        }}
+                        style={{ padding: "4px 8px", fontSize: "0.7rem", borderRadius: "4px", border: "none", cursor: "pointer", background: "#64748b", color: "white" }}
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTimers((prev) => prev.filter((t) => t.id !== timer.id));
+                        }}
+                        style={{ padding: "4px 6px", fontSize: "0.7rem", borderRadius: "4px", border: "none", cursor: "pointer", background: "rgba(239, 68, 68, 0.2)", color: "#ef4444" }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Time telemetry widget */}
         {jarvisRecipe ? (
